@@ -43,7 +43,7 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
           *ngIf="xAxis"
           [xScale]="xScale"
           [dims]="dims"
-          [showGridLines]="showGridLines"
+          [showGridLines]="showGridLines && showXAxisGrid"
           [showLabel]="showXAxisLabel"
           [labelText]="xAxisLabel"
           [tickFormatting]="xAxisTickFormatting"
@@ -54,7 +54,7 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
           *ngIf="yAxis"
           [yScale]="yScale"
           [dims]="dims"
-          [showGridLines]="showGridLines"
+          [showGridLines]="showGridLines && showYAxisGrid"
           [showLabel]="showYAxisLabel"
           [labelText]="yAxisLabel"
           [tickFormatting]="yAxisTickFormatting"
@@ -141,7 +141,6 @@ import { getUniqueXDomainValues } from '../common/domain.helper';
   encapsulation: ViewEncapsulation.None
 })
 export class AreaChartComponent extends BaseChartComponent {
-
   @Input() legend;
   @Input() legendTitle: string = 'Legend';
   @Input() state;
@@ -156,6 +155,8 @@ export class AreaChartComponent extends BaseChartComponent {
   @Input() timeline;
   @Input() gradient: boolean;
   @Input() showGridLines: boolean = true;
+  @Input() showXAxisGrid: boolean = true;
+  @Input() showYAxisGrid: boolean = true;
   @Input() curve: any = curveLinear;
   @Input() activeEntries: any[] = [];
   @Input() schemeType: string;
@@ -222,7 +223,7 @@ export class AreaChartComponent extends BaseChartComponent {
     });
 
     if (this.timeline) {
-      this.dims.height -= (this.timelineHeight + this.margin[2] + this.timelinePadding);
+      this.dims.height -= this.timelineHeight + this.margin[2] + this.timelinePadding;
     }
 
     this.xDomain = this.getXDomain();
@@ -241,7 +242,7 @@ export class AreaChartComponent extends BaseChartComponent {
     this.setColors();
     this.legendOptions = this.getLegendOptions();
 
-    this.transform = `translate(${ this.dims.xOffset }, ${ this.margin[0] })`;
+    this.transform = `translate(${this.dims.xOffset}, ${this.margin[0]})`;
 
     this.clipPathId = 'clip' + id().toString();
     this.clipPath = `url(#${this.clipPathId})`;
@@ -253,7 +254,7 @@ export class AreaChartComponent extends BaseChartComponent {
       this.timelineXDomain = this.getXDomain();
       this.timelineXScale = this.getXScale(this.timelineXDomain, this.timelineWidth);
       this.timelineYScale = this.getYScale(this.yDomain, this.timelineHeight);
-      this.timelineTransform = `translate(${ this.dims.xOffset }, ${ -this.margin[2] })`;
+      this.timelineTransform = `translate(${this.dims.xOffset}, ${-this.margin[2]})`;
     }
   }
 
@@ -270,13 +271,9 @@ export class AreaChartComponent extends BaseChartComponent {
     let min;
     let max;
     if (this.scaleType === 'time' || this.scaleType === 'linear') {
-      min = this.xScaleMin
-        ? this.xScaleMin
-        : Math.min(...values);
+      min = this.xScaleMin ? this.xScaleMin : Math.min(...values);
 
-      max = this.xScaleMax
-        ? this.xScaleMax
-        : Math.max(...values);
+      max = this.xScaleMax ? this.xScaleMax : Math.max(...values);
     }
 
     if (this.scaleType === 'time') {
@@ -291,7 +288,7 @@ export class AreaChartComponent extends BaseChartComponent {
     } else if (this.scaleType === 'linear') {
       domain = [min, max];
       // Use compare function to sort numbers numerically
-      this.xSet = [...values].sort((a, b) => (a - b));
+      this.xSet = [...values].sort((a, b) => a - b);
     } else {
       domain = values;
       this.xSet = values;
@@ -319,13 +316,9 @@ export class AreaChartComponent extends BaseChartComponent {
       values.push(this.baseValue);
     }
 
-    const min = this.yScaleMin
-      ? this.yScaleMin
-      : Math.min(...values);
+    const min = this.yScaleMin ? this.yScaleMin : Math.min(...values);
 
-    const max = this.yScaleMax
-      ? this.yScaleMax
-      : Math.max(...values);
+    const max = this.yScaleMax ? this.yScaleMax : Math.max(...values);
 
     return [min, max];
   }
@@ -342,12 +335,10 @@ export class AreaChartComponent extends BaseChartComponent {
     } else if (this.scaleType === 'linear') {
       scale = scaleLinear();
     } else if (this.scaleType === 'ordinal') {
-      scale = scalePoint()
-        .padding(0.1);
+      scale = scalePoint().padding(0.1);
     }
 
-    scale.range([0, width])
-        .domain(domain);
+    scale.range([0, width]).domain(domain);
 
     return this.roundDomains ? scale.nice() : scale;
   }
@@ -466,7 +457,7 @@ export class AreaChartComponent extends BaseChartComponent {
       return;
     }
 
-    this.activeEntries = [ item, ...this.activeEntries ];
+    this.activeEntries = [item, ...this.activeEntries];
     this.activate.emit({ value: item, entries: this.activeEntries });
   }
 

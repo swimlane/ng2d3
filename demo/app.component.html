@@ -283,6 +283,8 @@
         [yScaleMax]="yScaleMax"
         [timeline]="timeline"
         [showGridLines]="showGridLines"
+        [showXAxisGrid]="showXAxisGrid"
+        [showYAxisGrid]="showYAxisGrid"
         [curve]="curve"
         [rangeFillOpacity]="rangeFillOpacity"
         [roundDomains]="roundDomains"
@@ -323,6 +325,8 @@
         [results]="bubble"
         [animations]="animations"
         [showGridLines]="showGridLines"
+        [showXAxisGrid]="showXAxisGrid"
+        [showYAxisGrid]="showYAxisGrid"
         [legend]="showLegend"
         [legendTitle]="legendTitle"
         [xAxis]="showXAxis"
@@ -382,6 +386,8 @@
         [yScaleMax]="yScaleMax"
         [timeline]="timeline"
         [showGridLines]="showGridLines"
+        [showXAxisGrid]="showXAxisGrid"
+        [showYAxisGrid]="showYAxisGrid"
         [roundDomains]="roundDomains"
         [curve]="curve"
         [tooltipDisabled]="tooltipDisabled"
@@ -411,6 +417,8 @@
         [yScaleMin]="yScaleMin"
         [yScaleMax]="yScaleMax"
         [showGridLines]="showGridLines"
+        [showXAxisGrid]="showXAxisGrid"
+        [showYAxisGrid]="showYAxisGrid"
         [roundDomains]="roundDomains"
         [tooltipDisabled]="tooltipDisabled"
         [curve]="curve"
@@ -436,6 +444,8 @@
         [yAxisLabel]="yAxisLabel"
         [timeline]="timeline"
         [showGridLines]="showGridLines"
+        [showXAxisGrid]="showXAxisGrid"
+        [showYAxisGrid]="showYAxisGrid"
         [roundDomains]="roundDomains"
         [tooltipDisabled]="tooltipDisabled"
         [curve]="curve"
@@ -992,6 +1002,18 @@
         <label>
           <input type="checkbox" [checked]="showGridLines" (change)="showGridLines = $event.target.checked">
           Show Grid Lines
+        </label> <br />
+      </div>
+      <div *ngIf="chart.options.includes('showXAxisGrid')">
+        <label>
+          <input type="checkbox" [checked]="showXAxisGrid" (change)="showXAxisGrid = $event.target.checked">
+          Show X Axis Grid Lines
+        </label> <br />
+      </div>
+      <div *ngIf="chart.options.includes('showYAxisGrid')">
+        <label>
+          <input type="checkbox" [checked]="showYAxisGrid" (change)="showYAxisGrid = $event.target.checked">
+          Show Y Axis Grid Lines
         </label> <br />
       </div>
       <div *ngIf="chart.options.includes('roundDomains')">
