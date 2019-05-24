@@ -43,9 +43,9 @@ import { formatLabel } from '../common/label.helper';
             [tooltipTemplate]="tooltipTemplate"
             [tooltipContext]="series.data[0].data"
           />
-          <svg:text *ngIf="animations"
+          <svg:text *ngIf="animations && !hidePercentage"
             class="label percent-label"
-            dy="-0.5em"
+            [attr.dy]="getHidePercentageDy()"
             x="0"
             y="5"
             ngx-charts-count-up
@@ -53,17 +53,17 @@ import { formatLabel } from '../common/label.helper';
             [countSuffix]="'%'"
             text-anchor="middle">
           </svg:text>
-          <svg:text *ngIf="!animations"
+          <svg:text *ngIf="!animations && !hidePercentage"
             class="label percent-label"
-            dy="-0.5em"
+            [attr.dy]="getHidePercentageDy()"
             x="0"
             y="5"
             text-anchor="middle">
             {{series.percent.toLocaleString()}}
           </svg:text>
-          <svg:text
+          <svg:text *ngIf="!hideSeriesLabel"
             class="label"
-            dy="0.5em"
+            [attr.dy]="getHideSeriesLabelDy()"
             x="0"
             y="5"
             text-anchor="middle">
@@ -104,6 +104,8 @@ export class PieGridComponent extends BaseChartComponent {
   @Input() tooltipText: (o: any) => any;
   @Input() label: string = 'Total';
   @Input() minWidth: number = 150;
+  @Input() hidePercentage: boolean = false;
+  @Input() hideSeriesLabel: boolean = false;
 
   dims: ViewDimensions;
   data: any[];
@@ -208,4 +210,11 @@ export class PieGridComponent extends BaseChartComponent {
     this.colorScale = new ColorHelper(this.scheme, 'ordinal', this.domain, this.customColors);
   }
 
+  getHidePercentageDy(): string {
+    return (this.hideSeriesLabel && !this.hidePercentage) ? '0.0em' : '-0.5em';
+  }
+  
+  getHideSeriesLabelDy(): string {
+    return (this.hidePercentage && !this.hideSeriesLabel) ? '0.0em' : '0.5em';
+  }
 }

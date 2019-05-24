@@ -15,7 +15,9 @@
 | scheme | object |  | the color scheme of the chart |
 | customColors | function or object |  | custom colors for the chart. Used to override a color for a specific value |
 | animations | boolean | true | enable animations |
-| label | string | 'Total' | the text to show under the total value |
+| label           | string             | 'Total'       | the text to show under the total value   
+| hidePercentage  | boolean            | false         | hide percentage inside the pie grid
+| hideSeriesLabel | boolean            | false         | hide series label inside the pie grid         
 | tooltipDisabled | boolean | false | show or hide the tooltip |
 | tooltipTemplate | TemplateRef |  | a custom ng-template to be displayed inside the tooltip |
 | designatedTotal | number |  | total number that the value of each object in the results array will be compared to. If left undefined, the value of each object will automatically be compared to the total of all the values in the results array. |
