@@ -28,7 +28,7 @@ export class BaseChartComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() view: [number, number];
   @Input() scheme: any = 'cool';
   @Input() schemeType: string = 'ordinal';
-  @Input() customColors: any;
+  @Input() customColors: {name: string; value: string} | {name: string; value: string}[];
   @Input() animations: boolean = true;
 
   @Output() select = new EventEmitter();
