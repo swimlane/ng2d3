@@ -10,35 +10,45 @@ import {
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { formatLabel, escapeLabel } from '../common/label.helper';
+import { ColorHelper } from '../common';
+import { ScaleTime, ScaleLinear, ScalePoint } from 'd3-scale';
+import { BubbleChartSeries, BubbleChartDataItem } from '../models/chart-data.model';
+import { IShapeCircle, IShapeData, IShapePolygon, IShapeRectangle, IShapeBase } from '../models/shape.model';
+import { ScaleType } from '../enums/scale.enum';
+import { ShapeType } from '../enums/shape.enum';
 
 @Component({
   selector: 'g[ngx-charts-bubble-series]',
   template: `
-    <svg:g *ngFor="let circle of circles; trackBy: trackBy">
-      <svg:g [attr.transform]="circle.transform">
+    <svg:g *ngFor="let shape of shapes; trackBy: trackBy">
+      <svg:g [attr.transform]="shape.transform">
         <svg:g
-          ngx-charts-circle
+          ngx-charts-shape
           [@animationState]="'active'"
           class="circle"
-          [cx]="0"
-          [cy]="0"
-          [r]="circle.radius"
-          [fill]="circle.color"
-          [style.opacity]="circle.opacity"
-          [class.active]="circle.isActive"
+          [cx]="shape.cx"
+          [cy]="shape.cy"
+          [width]="shape.width"
+          [height]="shape.height"
+          [r]="shape.radius"
+          [shapeType]="shapeType"
+          [points]="shape.formattedPoints"
+          [fill]="shape.color"
+          [style.opacity]="shape.opacity"
+          [class.active]="shape.isActive"
           [pointerEvents]="'all'"
-          [data]="circle.value"
-          [classNames]="circle.classNames"
-          (select)="onClick(circle.data)"
-          (activate)="activateCircle(circle)"
-          (deactivate)="deactivateCircle(circle)"
+          [data]="shape.value"
+          [classNames]="shape.classNames"
+          (select)="onClick(shape.data)"
+          (activate)="activateCircle(shape)"
+          (deactivate)="deactivateCircle(shape)"
           ngx-tooltip
           [tooltipDisabled]="tooltipDisabled"
           [tooltipPlacement]="'top'"
           [tooltipType]="'tooltip'"
-          [tooltipTitle]="tooltipTemplate ? undefined : getTooltipText(circle)"
+          [tooltipTitle]="tooltipTemplate ? undefined : getTooltipText(shape)"
           [tooltipTemplate]="tooltipTemplate"
-          [tooltipContext]="circle.data"
+          [tooltipContext]="shape.data"
         />
       </svg:g>
     </svg:g>
@@ -57,101 +67,135 @@ import { formatLabel, escapeLabel } from '../common/label.helper';
   ]
 })
 export class BubbleSeriesComponent implements OnChanges {
-  @Input() data;
-  @Input() xScale;
-  @Input() yScale;
-  @Input() rScale;
-  @Input() xScaleType;
-  @Input() yScaleType;
-  @Input() colors;
-  @Input() visibleValue;
-  @Input() activeEntries: any[];
+  @Input() data: BubbleChartSeries;
+  @Input() xScale: ScaleTime<number, number> | ScaleLinear<number, number> | ScalePoint<string>;
+  @Input() yScale: ScaleTime<number, number> | ScaleLinear<number, number> | ScalePoint<string>;
+  @Input() rScale: ScaleLinear<number, number>;
+  @Input() xScaleType: string;
+  @Input() yScaleType: string;
+  @Input() colors: ColorHelper;
+  @Input() activeEntries: IShapeData[] = [];
   @Input() xAxisLabel: string;
   @Input() yAxisLabel: string;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
+  @Input() shapeType: string = ShapeType.rectangle;
 
-  @Output() select = new EventEmitter();
-  @Output() activate = new EventEmitter();
-  @Output() deactivate = new EventEmitter();
+  @Output() select: EventEmitter<IShapeData> = new EventEmitter();
+  @Output() activate: EventEmitter<Partial<IShapeData>> = new EventEmitter();
+  @Output() deactivate: EventEmitter<Partial<IShapeData>> = new EventEmitter();
 
-  areaPath: any;
-  circles: any[];
+  shapes: Array<IShapeCircle | IShapeRectangle | IShapePolygon>;
 
   ngOnChanges(changes: SimpleChanges): void {
     this.update();
   }
 
   update(): void {
-    this.circles = this.getCircles();
+    this.shapes = this.getCircles();
   }
 
-  getCircles(): any[] {
+  getCircles(): Array<IShapeCircle | IShapeRectangle | IShapePolygon> {
     const seriesName = this.data.name;
 
     return this.data.series
       .map((d, i) => {
         if (typeof d.y !== 'undefined' && typeof d.x !== 'undefined') {
-          const y = d.y;
           const x = d.x;
+          const y = d.y;
           const r = d.r;
 
           const radius = this.rScale(r || 1);
           const tooltipLabel = formatLabel(d.name);
 
-          const cx = this.xScaleType === 'linear' ? this.xScale(Number(x)) : this.xScale(x);
-          const cy = this.yScaleType === 'linear' ? this.yScale(Number(y)) : this.yScale(y);
+          const cx = this.xScale(x as any);
+          const cy = this.yScale(y as any);
 
-          const color = this.colors.scaleType === 'linear' ? this.colors.getColor(r) : this.colors.getColor(seriesName);
+          const width = radius * 2;
+          const height = radius * 2;
+
+          // Example of triangle using circle data.
+          const polygonPoints = [
+            [cx, cy + radius],
+            [Math.round(cx - 0.866 * radius), Math.round(cy - 0.5 * radius)],
+            [Math.round(cx + 0.866 * radius), Math.round(cy - 0.5 * radius)]
+          ];
+
+          const formattedPoints = polygonPoints.map(item => item.join(',')).join(' ');
+
+          const color =
+            this.colors.scaleType === ScaleType.linear ? this.colors.getColor(r) : this.colors.getColor(seriesName);
 
           const isActive = !this.activeEntries.length ? true : this.isActive({ name: seriesName });
           const opacity = isActive ? 1 : 0.3;
 
-          const data = Object.assign({}, d, {
-            series: seriesName,
-            name: d.name,
+          const data: IShapeData = {
+            series: d.name,
+            name: seriesName,
             value: d.y,
             x: d.x,
             radius: d.r
-          });
+          };
 
-          return {
+          const baseData: IShapeBase = {
             data,
             x,
             y,
             r,
             classNames: [`circle-data-${i}`],
             value: y,
-            label: x,
-            cx,
-            cy,
-            radius,
+            label: d.name,
             tooltipLabel,
             color,
             opacity,
             seriesName,
             isActive,
-            transform: `translate(${cx},${cy})`
+            transform: `translate(${cx},${cy})`,
+            barVisible: true
           };
+
+          switch (this.shapeType) {
+            case ShapeType.circle:
+              const circleData: IShapeCircle = { ...baseData, cx: 0, cy: 0, radius };
+              return circleData;
+            case ShapeType.rectangle:
+              const rectData: IShapeRectangle = {
+                ...baseData,
+                cx: -width / 2,
+                cy: -height / 2,
+                width,
+                height,
+                rx: 0,
+                ry: 0
+              };
+              return rectData;
+            case ShapeType.polygon:
+              const polygonData: IShapePolygon = { ...baseData, formattedPoints, transform: `` };
+              return polygonData;
+          }
         }
       })
-      .filter(circle => circle !== undefined);
+      .filter(shape => shape !== undefined);
   }
 
-  getTooltipText(circle): string {
-    const hasRadius = typeof circle.r !== 'undefined';
-    const hasTooltipLabel = circle.tooltipLabel && circle.tooltipLabel.length;
-    const hasSeriesName = circle.seriesName && circle.seriesName.length;
-
-    const radiusValue = hasRadius ? formatLabel(circle.r) : '';
+  getTooltipText(shape: IShapeCircle | IShapeRectangle | IShapePolygon): string {
+    let radiusValue = '';
+    if (this.shapeType === ShapeType.circle) {
+      const shapeCircle = shape as IShapeCircle;
+      if (typeof shapeCircle.r !== 'undefined') {
+        radiusValue = formatLabel(shapeCircle.r);
+      }
+    }
+    const hasTooltipLabel = shape.tooltipLabel && shape.tooltipLabel.length;
+    const hasSeriesName = shape.seriesName && shape.seriesName.toString().length;
     const xAxisLabel = this.xAxisLabel && this.xAxisLabel !== '' ? `${this.xAxisLabel}:` : '';
     const yAxisLabel = this.yAxisLabel && this.yAxisLabel !== '' ? `${this.yAxisLabel}:` : '';
-    const x = formatLabel(circle.x);
-    const y = formatLabel(circle.y);
+    const x = formatLabel(shape.x);
+    const y = formatLabel(shape.y);
     const name =
       hasSeriesName && hasTooltipLabel
-        ? `${circle.seriesName} • ${circle.tooltipLabel}`
-        : circle.seriesName + circle.tooltipLabel;
+        ? `${shape.seriesName} • ${shape.tooltipLabel}`
+        : shape.seriesName + shape.tooltipLabel;
     const tooltipTitle =
       hasSeriesName || hasTooltipLabel ? `<span class="tooltip-label">${escapeLabel(name)}</span>` : '';
 
@@ -167,37 +211,35 @@ export class BubbleSeriesComponent implements OnChanges {
     `;
   }
 
-  onClick(data): void {
+  onClick(data: IShapeData): void {
     this.select.emit(data);
   }
 
-  isActive(entry): boolean {
+  isActive(entry: Partial<BubbleChartDataItem>): boolean {
     if (!this.activeEntries) return false;
-    const item = this.activeEntries.find(d => {
-      return entry.name === d.name;
-    });
+    const item = this.activeEntries.find(d => entry.name === d.name);
     return item !== undefined;
   }
 
-  isVisible(circle): boolean {
-    if (this.activeEntries.length > 0) {
+  isVisible(circle: IShapeCircle): boolean {
+    if (this.activeEntries.length) {
       return this.isActive({ name: circle.seriesName });
     }
 
     return circle.opacity !== 0;
   }
 
-  activateCircle(circle): void {
+  activateCircle(circle: IShapeCircle): void {
     circle.barVisible = true;
-    this.activate.emit({ name: this.data.name });
+    this.activate.emit(circle.data);
   }
 
-  deactivateCircle(circle): void {
+  deactivateCircle(circle: IShapeCircle): void {
     circle.barVisible = false;
-    this.deactivate.emit({ name: this.data.name });
+    this.deactivate.emit(circle.data);
   }
 
-  trackBy(index, circle): string {
+  trackBy(index: number, circle: IShapeCircle): string {
     return `${circle.data.series} ${circle.data.name}`;
   }
 }

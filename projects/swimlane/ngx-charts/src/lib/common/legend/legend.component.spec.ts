@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
 import { ChartCommonModule } from '../chart-common.module';
-import { ColorHelper } from '../color.helper';
+import { ColorHelper, IColorSet } from '../color.helper';
 
 // some test data (includes just enought data to run the tests)
 const seriesData = ['complete', 'not complete'];
@@ -18,7 +18,11 @@ class TestComponent {
   legendHeight: number;
 
   constructor() {
-    const scheme = { domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'] };
+    const scheme: IColorSet = {
+      name: 'test',
+      group: 'Ordinal',
+      domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    };
     this.colors = new ColorHelper(scheme, 'ordinal', [], null);
   }
 }

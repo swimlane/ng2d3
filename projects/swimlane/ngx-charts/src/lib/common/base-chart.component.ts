@@ -16,6 +16,7 @@ import { fromEvent as observableFromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { VisibilityObserver } from '../utils';
+import { ColorScheme } from '../enums/scheme.enum';
 
 @Component({
   selector: 'base-chart',
@@ -26,7 +27,7 @@ import { VisibilityObserver } from '../utils';
 export class BaseChartComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() results: any;
   @Input() view: [number, number];
-  @Input() scheme: any = 'cool';
+  @Input() scheme: string = ColorScheme.cool;
   @Input() schemeType: string = 'ordinal';
   @Input() customColors: any;
   @Input() animations: boolean = true;

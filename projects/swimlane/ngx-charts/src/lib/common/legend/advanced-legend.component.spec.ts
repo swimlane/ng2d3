@@ -2,7 +2,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
 import { ChartCommonModule } from '../chart-common.module';
-import { ColorHelper } from '../color.helper';
+import { ColorHelper, IColorSet } from '../color.helper';
 
 @Component({
   selector: 'test-component',
@@ -15,7 +15,11 @@ class TestComponent {
   data: any;
 
   constructor() {
-    const scheme = { domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'] };
+    const scheme: IColorSet = {
+      name: 'test',
+      group: 'Ordinal',
+      domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    };
     this.colors = new ColorHelper(scheme, 'ordinal', [], null);
     this.data = [
       { name: 'a', value: 8 },

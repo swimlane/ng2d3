@@ -6,6 +6,7 @@ import {
   Series,
   TreeMapData
 } from '@swimlane/ngx-charts/models/chart-data.model';
+import { IShapeData } from '@swimlane/ngx-charts/models/shape.model';
 
 export const single: SingleSeries = [
   {
@@ -219,20 +220,20 @@ export const bubble: BubbleChartMultiSeries = [
     name: 'Germany',
     series: [
       {
-        name: '2010',
-        x: '2010',
+        name: new Date('03/03/2019'),
+        x: '2019',
         y: 80.3,
         r: 80.4
       },
       {
-        name: '2000',
-        x: '2000',
+        name: new Date('03/03/2020'),
+        x: '2020',
         y: 80.3,
         r: 78
       },
       {
-        name: '1990',
-        x: '1990',
+        name: new Date('03/03/2021'),
+        x: '2021',
         y: 75.4,
         r: 79
       }
@@ -242,20 +243,20 @@ export const bubble: BubbleChartMultiSeries = [
     name: 'United States',
     series: [
       {
-        name: '2010',
-        x: '2010',
+        name: new Date('03/03/2019'),
+        x: '2019',
         y: 78.8,
         r: 310
       },
       {
-        name: '2000',
-        x: '2000',
+        name: new Date('03/03/2020'),
+        x: '2020',
         y: 76.9,
         r: 283
       },
       {
-        name: '1990',
-        x: '1990',
+        name: new Date('03/03/2021'),
+        x: '2021',
         y: 75.4,
         r: 253
       }
@@ -265,20 +266,20 @@ export const bubble: BubbleChartMultiSeries = [
     name: 'France',
     series: [
       {
-        name: '2010',
-        x: '2010',
+        name: new Date('03/03/2019'),
+        x: '2019',
         y: 81.4,
         r: 63
       },
       {
-        name: '2000',
-        x: '2000',
+        name: new Date('03/03/2020'),
+        x: '2020',
         y: 79.1,
         r: 59.4
       },
       {
-        name: '1990',
-        x: '1990',
+        name: new Date('03/03/2021'),
+        x: '2021',
         y: 77.2,
         r: 56.9
       }
@@ -288,24 +289,34 @@ export const bubble: BubbleChartMultiSeries = [
     name: 'United Kingdom',
     series: [
       {
-        name: '2010',
-        x: '2010',
+        name: new Date('03/03/2019'),
+        x: '2019',
         y: 80.2,
         r: 62.7
       },
       {
-        name: '2000',
-        x: '2000',
+        name: new Date('03/03/2020'),
+        x: '2020',
         y: 77.8,
         r: 58.9
       },
       {
-        name: '1990',
-        x: '1990',
+        name: new Date('03/03/2021'),
+        x: '2021',
         y: 75.7,
         r: 57.1
       }
     ]
+  }
+];
+
+export const bubbleActiveEntries: IShapeData[] = [
+  {
+    name: 'United Kingdom',
+    series: new Date('03/03/2021'),
+    value: 75.7,
+    x: '2021',
+    radius: 57.1
   }
 ];
 

@@ -10,6 +10,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { formatLabel } from '../label.helper';
+import { ColorHelper } from '../color.helper';
 
 @Component({
   selector: 'ngx-charts-legend',
@@ -42,11 +43,11 @@ import { formatLabel } from '../label.helper';
 })
 export class LegendComponent implements OnChanges {
   @Input() data;
-  @Input() title;
-  @Input() colors;
-  @Input() height;
-  @Input() width;
-  @Input() activeEntries;
+  @Input() title: string;
+  @Input() colors: ColorHelper;
+  @Input() height: number;
+  @Input() width: number;
+  @Input() activeEntries: any[];
   @Input() horizontal = false;
 
   @Output() labelClick: EventEmitter<any> = new EventEmitter();
@@ -88,11 +89,9 @@ export class LegendComponent implements OnChanges {
     return items;
   }
 
-  isActive(entry): boolean {
+  isActive(entry: any): boolean {
     if (!this.activeEntries) return false;
-    const item = this.activeEntries.find(d => {
-      return entry.label === d.name;
-    });
+    const item = this.activeEntries.find(d => entry.label === d.name);
     return item !== undefined;
   }
 

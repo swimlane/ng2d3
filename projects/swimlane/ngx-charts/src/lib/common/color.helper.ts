@@ -1,16 +1,42 @@
 import { range } from 'd3-array';
-import { scaleBand, scaleLinear, scaleOrdinal, scaleQuantile } from 'd3-scale';
+import {
+  scaleBand,
+  scaleLinear,
+  scaleOrdinal,
+  scaleQuantile,
+  ScaleQuantile,
+  ScaleOrdinal,
+  ScaleLinear
+} from 'd3-scale';
 
 import { colorSets } from '../utils/color-sets';
+import { ScaleType } from '../enums/scale.enum';
+
+export interface IColorSet {
+  name: string;
+  group: string;
+  domain: string[];
+  selectable?: boolean;
+}
+
+export interface ICustomColor {
+  name: string | number | Date;
+  value: string;
+}
 
 export class ColorHelper {
-  scale: any;
-  scaleType: any;
-  colorDomain: any[];
-  domain: any;
-  customColors: any;
+  scale: ScaleQuantile<string> | ScaleOrdinal<string | number, string> | ScaleLinear<string, string>;
+  scaleType: string;
+  colorDomain: string[];
+  domain: Array<string | number>;
+  customColors: ICustomColor[] | ((val) => string);
 
-  constructor(scheme, type, domain, customColors?) {
+  constructor(
+    scheme: string | IColorSet,
+    type: string,
+    domain: Array<string | number>,
+    customColors?: ICustomColor[] | ((val) => string)
+  ) {
     if (typeof scheme === 'string') {
       scheme = colorSets.find(cs => {
         return cs.name === scheme;
@@ -24,76 +50,83 @@ export class ColorHelper {
     this.scale = this.generateColorScheme(scheme, type, this.domain);
   }
 
-  generateColorScheme(scheme, type, domain) {
+  generateColorScheme(scheme: string | IColorSet, type: string, domain: Array<string | number>) {
     if (typeof scheme === 'string') {
       scheme = colorSets.find(cs => {
         return cs.name === scheme;
       });
     }
-    let colorScale;
-    if (type === 'quantile') {
-      colorScale = scaleQuantile()
-        .range(scheme.domain)
-        .domain(domain);
-    } else if (type === 'ordinal') {
-      colorScale = scaleOrdinal()
-        .range(scheme.domain)
-        .domain(domain);
-    } else if (type === 'linear') {
-      // linear schemes must have at least 2 colors
-      const colorDomain = [...scheme.domain];
-      if (colorDomain.length === 1) {
-        colorDomain.push(colorDomain[0]);
-        this.colorDomain = colorDomain;
-      }
+    let colorScale: ScaleQuantile<string> | ScaleOrdinal<string | number, string> | ScaleLinear<string, string>;
+    switch (type) {
+      case ScaleType.quantile:
+        // Please refer to: https://github.com/tomwanzek/d3-v4-definitelytyped/issues/134
+        colorScale = scaleQuantile<string>()
+          .range(scheme.domain)
+          .domain(domain as any);
+        break;
+      case ScaleType.ordinal:
+        colorScale = scaleOrdinal<string | number, string>()
+          .range(scheme.domain)
+          .domain(domain);
+        break;
+      case ScaleType.linear:
+        // linear schemes must have at least 2 colors
+        const colorDomain = [...scheme.domain];
+        if (colorDomain.length === 1) {
+          colorDomain.push(colorDomain[0]);
+          this.colorDomain = colorDomain;
+        }
 
-      const points = range(0, 1, 1.0 / colorDomain.length);
-      colorScale = scaleLinear()
-        .domain(points)
-        .range(colorDomain);
+        const points = range(0, 1, 1.0 / colorDomain.length);
+        colorScale = scaleLinear<string, string>()
+          .domain(points)
+          .range(colorDomain);
+        break;
+      default:
+        // Do nothing.
+        break;
     }
 
     return colorScale;
   }
 
-  getColor(value) {
+  getColor(value: string | number | Date): string {
     if (value === undefined || value === null) {
       throw new Error('Value can not be null');
     }
-    if (this.scaleType === 'linear') {
-      const valueScale = scaleLinear()
-        .domain(this.domain)
-        .range([0, 1]);
+    switch (this.scaleType) {
+      case ScaleType.linear:
+        const valueScale = scaleLinear<number, number>()
+          .domain(this.domain as any)
+          .range([0, 1]);
+        return this.scale(valueScale(Number(value)));
+      default:
+        if (typeof this.customColors === 'function') {
+          return this.customColors(value);
+        }
+        const formattedValue = value.toString();
+        let found: ICustomColor; // todo type customColors
+        if (this.customColors && this.customColors.length > 0) {
+          found = this.customColors.find(mapping => {
+            return mapping.name.toString().toLowerCase() === formattedValue.toLowerCase();
+          });
+        }
 
-      return this.scale(valueScale(value));
-    } else {
-      if (typeof this.customColors === 'function') {
-        return this.customColors(value);
-      }
-
-      const formattedValue = value.toString();
-      let found: any; // todo type customColors
-      if (this.customColors && this.customColors.length > 0) {
-        found = this.customColors.find(mapping => {
-          return mapping.name.toLowerCase() === formattedValue.toLowerCase();
-        });
-      }
-
-      if (found) {
-        return found.value;
-      } else {
-        return this.scale(value);
-      }
+        if (found) {
+          return found.value;
+        } else {
+          return this.scale(value as any);
+        }
     }
   }
 
-  getLinearGradientStops(value, start) {
+  getLinearGradientStops(value: string | number, start: string | number) {
     if (start === undefined) {
       start = this.domain[0];
     }
 
     const valueScale = scaleLinear()
-      .domain(this.domain)
+      .domain(this.domain as any)
       .range([0, 1]);
 
     const colorValueScale = scaleBand()
@@ -103,10 +136,10 @@ export class ColorHelper {
     const endColor = this.getColor(value);
 
     // generate the stops
-    const startVal = valueScale(start);
+    const startVal = valueScale(Number(start).valueOf());
     const startColor = this.getColor(start);
 
-    const endVal = valueScale(value);
+    const endVal = valueScale(Number(value).valueOf());
     let i = 1;
     let currentVal = startVal;
     const stops = [];

@@ -3,7 +3,7 @@
  *
  * @export
  */
-export function formatLabel(label: any): string {
+export function formatLabel(label: string | number | Date): string {
   if (label instanceof Date) {
     label = label.toLocaleDateString();
   } else {

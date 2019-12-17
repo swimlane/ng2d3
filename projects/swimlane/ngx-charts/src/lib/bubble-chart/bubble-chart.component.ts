@@ -10,14 +10,17 @@ import {
   TemplateRef
 } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { scaleLinear } from 'd3-scale';
+import { scaleLinear, ScaleTime, ScaleLinear, ScalePoint } from 'd3-scale';
 
 import { BaseChartComponent } from '../common/base-chart.component';
 import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { getScaleType } from '../common/domain.helper';
-import { getDomain, getScale } from './bubble-chart.utils';
+import { getBubbleDomain, getBubbleScale } from './bubble-chart.utils';
 import { id } from '../utils/id';
+import { BubbleChartMultiSeries, BubbleChartSeries } from '../models/chart-data.model';
+import { ScaleType } from '../enums/scale.enum';
+import { IShapeData } from '../models/shape.model';
 
 @Component({
   selector: 'ngx-charts-bubble-chart',
@@ -25,7 +28,7 @@ import { id } from '../utils/id';
     <ngx-charts-chart
       [view]="[width, height]"
       [showLegend]="legend"
-      [activeEntries]="activeEntries"
+      [activeEntries]="activeEntriesCopy"
       [legendOptions]="legendOptions"
       [animations]="animations"
       (legendLabelClick)="onClick($event)"
@@ -93,7 +96,7 @@ import { id } from '../utils/id';
               [yAxisLabel]="yAxisLabel"
               [colors]="colors"
               [data]="series"
-              [activeEntries]="activeEntries"
+              [activeEntries]="activeEntriesCopy"
               [tooltipDisabled]="tooltipDisabled"
               [tooltipTemplate]="tooltipTemplate"
               (select)="onClick($event, series)"
@@ -126,7 +129,7 @@ import { id } from '../utils/id';
 })
 export class BubbleChartComponent extends BaseChartComponent {
   @Input() showGridLines: boolean = true;
-  @Input() legend = false;
+  @Input() legend: boolean = false;
   @Input() legendTitle: string = 'Legend';
   @Input() legendPosition: string = 'right';
   @Input() xAxis: boolean = true;
@@ -145,15 +148,16 @@ export class BubbleChartComponent extends BaseChartComponent {
   @Input() xAxisTicks: any[];
   @Input() yAxisTicks: any[];
   @Input() roundDomains: boolean = false;
-  @Input() maxRadius = 10;
-  @Input() minRadius = 3;
+  @Input() maxRadius: number = 10;
+  @Input() minRadius: number = 3;
   @Input() autoScale: boolean;
-  @Input() schemeType = 'ordinal';
+  @Input() schemeType: string = ScaleType.ordinal;
   @Input() tooltipDisabled: boolean = false;
   @Input() xScaleMin: any;
   @Input() xScaleMax: any;
   @Input() yScaleMin: any;
   @Input() yScaleMax: any;
+  @Input() activeEntries: IShapeData[] = [];
 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
@@ -162,10 +166,12 @@ export class BubbleChartComponent extends BaseChartComponent {
 
   dims: ViewDimensions;
   colors: ColorHelper;
-  scaleType = 'linear';
-  margin = [10, 20, 10, 20];
-  bubblePadding = [0, 0, 0, 0];
-  data: any;
+  scaleType: string = ScaleType.linear;
+  margin: number[] = [10, 20, 10, 20];
+  bubblePadding: number[] = [0, 0, 0, 0];
+  results: BubbleChartMultiSeries;
+  data: BubbleChartMultiSeries;
+  activeEntriesCopy: IShapeData[] = [];
 
   legendOptions: any;
   transform: string;
@@ -173,22 +179,20 @@ export class BubbleChartComponent extends BaseChartComponent {
   clipPath: string;
   clipPathId: string;
 
-  seriesDomain: any[];
-  xDomain: any[];
-  yDomain: any[];
+  seriesDomain: string[];
+  xDomain: Array<string | number | Date>;
+  yDomain: Array<string | number | Date>;
   rDomain: number[];
 
   xScaleType: string;
   yScaleType: string;
 
-  yScale: any;
-  xScale: any;
-  rScale: any;
+  yScale: ScaleTime<number, number> | ScaleLinear<number, number> | ScalePoint<string>;
+  xScale: ScaleTime<number, number> | ScaleLinear<number, number> | ScalePoint<string>;
+  rScale: ScaleLinear<number, number>;
 
   xAxisHeight: number = 0;
   yAxisWidth: number = 0;
-
-  activeEntries: any[] = [];
 
   update(): void {
     super.update();
@@ -208,17 +212,22 @@ export class BubbleChartComponent extends BaseChartComponent {
       legendPosition: this.legendPosition
     });
 
-    this.seriesDomain = this.results.map(d => d.name);
+    this.seriesDomain = this.results.map(d => d.name.toString());
     this.rDomain = this.getRDomain();
     this.xDomain = this.getXDomain();
     this.yDomain = this.getYDomain();
 
+    // console.log(
+    //   `Domains: \n - R Domain: ${this.rDomain} \n - X Domain: ${this.xDomain} \n - Y Domain: ${this.yDomain}`
+    // );
+
     this.transform = `translate(${this.dims.xOffset},${this.margin[0]})`;
 
-    const colorDomain = this.schemeType === 'ordinal' ? this.seriesDomain : this.rDomain;
+    const colorDomain = this.schemeType === ScaleType.ordinal ? this.seriesDomain : this.rDomain;
     this.colors = new ColorHelper(this.scheme, this.schemeType, colorDomain, this.customColors);
 
     this.data = this.results;
+    this.activeEntriesCopy = this.activeEntries && this.activeEntries.length ? this.activeEntries : [];
 
     this.minRadius = Math.max(this.minRadius, 1);
     this.maxRadius = Math.max(this.maxRadius, 1);
@@ -242,11 +251,10 @@ export class BubbleChartComponent extends BaseChartComponent {
     this.deactivateAll();
   }
 
-  onClick(data, series?): void {
+  onClick(data: IShapeData, series?: BubbleChartSeries): void {
     if (series) {
-      data.series = series.name;
+      data.name = series.name;
     }
-
     this.select.emit(data);
   }
 
@@ -259,8 +267,8 @@ export class BubbleChartComponent extends BaseChartComponent {
     for (const s of this.data) {
       for (const d of s.series) {
         const r = this.rScale(d.r);
-        const cx = this.xScaleType === 'linear' ? this.xScale(Number(d.x)) : this.xScale(d.x);
-        const cy = this.yScaleType === 'linear' ? this.yScale(Number(d.y)) : this.yScale(d.y);
+        const cx = this.xScale(d.x as any);
+        const cy = this.yScale(d.y as any);
         xMin = Math.max(r - cx, xMin);
         yMin = Math.max(r - cy, yMin);
         yMax = Math.max(cy + r, yMax);
@@ -287,15 +295,15 @@ export class BubbleChartComponent extends BaseChartComponent {
     this.yScale = this.getYScale(this.yDomain, height);
   }
 
-  getYScale(domain, height): any {
-    return getScale(domain, [height, this.bubblePadding[0]], this.yScaleType, this.roundDomains);
+  getYScale(domain, height: number) {
+    return getBubbleScale(domain, [height, this.bubblePadding[0]], this.yScaleType, this.roundDomains);
   }
 
-  getXScale(domain, width): any {
-    return getScale(domain, [this.bubblePadding[3], width], this.xScaleType, this.roundDomains);
+  getXScale(domain, width: number) {
+    return getBubbleScale(domain, [this.bubblePadding[3], width], this.xScaleType, this.roundDomains);
   }
 
-  getRScale(domain, range): any {
+  getRScale(domain: number[], range: number[]): ScaleLinear<number, number> {
     const scale = scaleLinear()
       .range(range)
       .domain(domain);
@@ -312,7 +320,7 @@ export class BubbleChartComponent extends BaseChartComponent {
       title: undefined
     };
 
-    if (opts.scaleType === 'ordinal') {
+    if (opts.scaleType === ScaleType.ordinal) {
       opts.domain = this.seriesDomain;
       opts.colors = this.colors;
       opts.title = this.legendTitle;
@@ -324,8 +332,8 @@ export class BubbleChartComponent extends BaseChartComponent {
     return opts;
   }
 
-  getXDomain(): any[] {
-    const values = [];
+  getXDomain(): Array<string | number | Date> {
+    const values: Array<string | number | Date> = [];
 
     for (const results of this.results) {
       for (const d of results.series) {
@@ -336,11 +344,11 @@ export class BubbleChartComponent extends BaseChartComponent {
     }
 
     this.xScaleType = getScaleType(values);
-    return getDomain(values, this.xScaleType, this.autoScale, this.xScaleMin, this.xScaleMax);
+    return getBubbleDomain(values, this.xScaleType, this.autoScale, this.xScaleMin, this.xScaleMax);
   }
 
-  getYDomain(): any[] {
-    const values = [];
+  getYDomain(): Array<string | number | Date> {
+    const values: Array<string | number | Date> = [];
 
     for (const results of this.results) {
       for (const d of results.series) {
@@ -351,7 +359,7 @@ export class BubbleChartComponent extends BaseChartComponent {
     }
 
     this.yScaleType = getScaleType(values);
-    return getDomain(values, this.yScaleType, this.autoScale, this.yScaleMin, this.yScaleMax);
+    return getBubbleDomain(values, this.yScaleType, this.autoScale, this.yScaleMin, this.yScaleMax);
   }
 
   getRDomain(): number[] {
@@ -379,38 +387,39 @@ export class BubbleChartComponent extends BaseChartComponent {
     this.update();
   }
 
-  onActivate(item): void {
-    const idx = this.activeEntries.findIndex(d => {
-      return d.name === item.name;
-    });
-    if (idx > -1) {
+  onActivate(item: IShapeData): void {
+    const idx =
+      this.activeEntries && this.activeEntries.length
+        ? this.activeEntries.findIndex(entry => entry.name === item.name)
+        : -1;
+    if (idx !== -1) {
       return;
+    } else {
+      this.activeEntriesCopy = [item, ...this.activeEntriesCopy];
+      this.activate.emit({ value: item, entries: this.activeEntriesCopy });
     }
-
-    this.activeEntries = [item, ...this.activeEntries];
-    this.activate.emit({ value: item, entries: this.activeEntries });
   }
 
-  onDeactivate(item): void {
-    const idx = this.activeEntries.findIndex(d => {
-      return d.name === item.name;
-    });
-
-    this.activeEntries.splice(idx, 1);
-    this.activeEntries = [...this.activeEntries];
-
-    this.deactivate.emit({ value: item, entries: this.activeEntries });
+  onDeactivate(item: IShapeData): void {
+    const idx = this.activeEntriesCopy.findIndex(entry => entry.name === item.name);
+    if (idx === -1) {
+      return;
+    } else {
+      this.activeEntriesCopy.splice(idx, 1);
+      this.activeEntriesCopy = [...this.activeEntriesCopy];
+      this.deactivate.emit({ value: item, entries: this.activeEntriesCopy });
+    }
   }
 
-  deactivateAll() {
-    this.activeEntries = [...this.activeEntries];
-    for (const entry of this.activeEntries) {
+  deactivateAll(): void {
+    this.activeEntriesCopy = [...this.activeEntriesCopy];
+    for (const entry of this.activeEntriesCopy) {
       this.deactivate.emit({ value: entry, entries: [] });
     }
-    this.activeEntries = [];
+    this.activeEntriesCopy = this.activeEntries && this.activeEntries.length ? [...this.activeEntries] : [];
   }
 
-  trackBy(index, item): string {
+  trackBy(index: number, item: BubbleChartSeries): string | number | Date {
     return item.name;
   }
 }

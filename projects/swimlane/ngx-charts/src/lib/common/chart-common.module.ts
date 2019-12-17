@@ -10,6 +10,7 @@ import { CircleSeriesComponent } from './circle-series.component';
 import { CircleComponent } from './circle.component';
 import { GridPanelComponent } from './grid-panel.component';
 import { GridPanelSeriesComponent } from './grid-panel-series.component';
+import { ShapeComponent } from './shape.component';
 import { SvgLinearGradientComponent } from './svg-linear-gradient.component';
 import { SvgRadialGradientComponent } from './svg-radial-gradient.component';
 import { Timeline } from './timeline';
@@ -30,6 +31,7 @@ const COMPONENTS = [
   CircleSeriesComponent,
   GridPanelComponent,
   GridPanelSeriesComponent,
+  ShapeComponent,
   SvgLinearGradientComponent,
   SvgRadialGradientComponent,
   Timeline,

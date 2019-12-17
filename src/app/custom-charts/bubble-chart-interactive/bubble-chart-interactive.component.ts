@@ -12,10 +12,11 @@ import {
 import { trigger, style, animate, transition } from '@angular/animations';
 import { scaleLinear } from 'd3-scale';
 
-import { getDomain, getScale } from '@swimlane/ngx-charts/bubble-chart/bubble-chart.utils';
+import { getBubbleScale, getBubbleDomain } from '@swimlane/ngx-charts/bubble-chart/bubble-chart.utils';
 import { getScaleType } from '@swimlane/ngx-charts/common/domain.helper';
 import { id } from '@swimlane/ngx-charts//utils/id';
 import { BaseChartComponent, ViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
+import { ScaleType } from '@swimlane/ngx-charts/enums/scale.enum';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -133,10 +134,10 @@ export class BubbleChartInteractiveComponent extends BaseChartComponent {
   @Input() xAxisTicks: any[];
   @Input() yAxisTicks: any[];
   @Input() roundDomains: boolean = false;
-  @Input() maxRadius = 10;
-  @Input() minRadius = 3;
+  @Input() maxRadius: number = 10;
+  @Input() minRadius: number = 3;
   @Input() autoScale: boolean;
-  @Input() schemeType = 'ordinal';
+  @Input() schemeType: string = 'ordinal';
   @Input() legendPosition: string = 'right';
   @Input() tooltipDisabled: boolean = false;
   @Input() xScaleMin: any;
@@ -152,9 +153,9 @@ export class BubbleChartInteractiveComponent extends BaseChartComponent {
 
   dims: ViewDimensions;
   colors: ColorHelper;
-  scaleType = 'linear';
-  margin = [10, 20, 10, 20];
-  bubblePadding = [0, 0, 0, 0];
+  scaleType: string = ScaleType.linear;
+  margin: number[] = [10, 20, 10, 20];
+  bubblePadding: number[] = [0, 0, 0, 0];
   data: any;
 
   legendOptions: any;
@@ -286,11 +287,11 @@ export class BubbleChartInteractiveComponent extends BaseChartComponent {
   }
 
   getYScale(domain, height): any {
-    return getScale(domain, [height, this.bubblePadding[0]], this.yScaleType, this.roundDomains);
+    return getBubbleScale(domain, [height, this.bubblePadding[0]], this.yScaleType, this.roundDomains);
   }
 
   getXScale(domain, width): any {
-    return getScale(domain, [this.bubblePadding[3], width], this.xScaleType, this.roundDomains);
+    return getBubbleScale(domain, [this.bubblePadding[3], width], this.xScaleType, this.roundDomains);
   }
 
   getRScale(domain, range): any {
@@ -334,7 +335,7 @@ export class BubbleChartInteractiveComponent extends BaseChartComponent {
     }
 
     this.xScaleType = getScaleType(values);
-    return getDomain(values, this.xScaleType, this.autoScale, this.xScaleMin, this.xScaleMax);
+    return getBubbleDomain(values, this.xScaleType, this.autoScale, this.xScaleMin, this.xScaleMax);
   }
 
   getYDomain(): any[] {
@@ -349,7 +350,7 @@ export class BubbleChartInteractiveComponent extends BaseChartComponent {
     }
 
     this.yScaleType = getScaleType(values);
-    return getDomain(values, this.yScaleType, this.autoScale, this.yScaleMin, this.yScaleMax);
+    return getBubbleDomain(values, this.yScaleType, this.autoScale, this.yScaleMin, this.yScaleMax);
   }
 
   getRDomain(): number[] {

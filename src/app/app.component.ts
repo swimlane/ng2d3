@@ -9,6 +9,7 @@ import {
   single,
   multi,
   bubble,
+  bubbleActiveEntries,
   generateData,
   generateGraph,
   treemap,
@@ -21,6 +22,8 @@ import { data as countries } from 'emoji-flags';
 import chartGroups from './chartTypes';
 import { barChart, lineChartSeries } from './combo-chart-data';
 import { version } from '../../projects/swimlane/ngx-charts/package.json';
+import { BubbleChartMultiSeries, BubbleChartDataItem, IColorSet } from 'projects/swimlane/ngx-charts/src/public-api';
+import { ColorScheme } from '@swimlane/ngx-charts/enums/scheme.enum';
 
 const monthName = new Intl.DateTimeFormat('en-us', { month: 'short' });
 const weekdayName = new Intl.DateTimeFormat('en-us', { weekday: 'short' });
@@ -45,7 +48,7 @@ function multiFormat(value) {
 export class AppComponent implements OnInit {
   APP_VERSION = version;
 
-  theme = 'dark';
+  theme: string = 'dark';
   chartType: string;
   chartGroups: any[];
   chart: any;
@@ -61,35 +64,37 @@ export class AppComponent implements OnInit {
   sparklineData: any[];
   timelineFilterBarData: any[];
   graph: { links: any[]; nodes: any[] };
-  bubble: any;
+  bubble: BubbleChartMultiSeries;
   linearScale: boolean = false;
   range: boolean = false;
 
-  view: any[];
+  bubbleActiveEntries: BubbleChartDataItem[];
+
+  view: number[];
   width: number = 700;
   height: number = 300;
   fitContainer: boolean = false;
 
   // options
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  showLegend = true;
-  legendTitle = 'Legend';
+  showXAxis: boolean = true;
+  showYAxis: boolean = true;
+  gradient: boolean = false;
+  showLegend: boolean = true;
+  legendTitle: string = 'Legend';
   legendPosition = 'right';
-  showXAxisLabel = true;
-  tooltipDisabled = false;
-  showText = true;
+  showXAxisLabel: boolean = true;
+  tooltipDisabled: boolean = false;
+  showText: boolean = true;
   xAxisLabel = 'Country';
-  showYAxisLabel = true;
+  showYAxisLabel: boolean = true;
   yAxisLabel = 'GDP Per Capita';
-  showGridLines = true;
+  showGridLines: boolean = true;
   innerPadding = '10%';
-  barPadding = 8;
-  groupPadding = 16;
-  roundDomains = false;
-  maxRadius = 10;
-  minRadius = 3;
+  barPadding: number = 8;
+  groupPadding: number = 16;
+  roundDomains: boolean = false;
+  maxRadius: number = 10;
+  minRadius: number = 3;
   showSeriesOnHover = true;
   roundEdges: boolean = true;
   animations: boolean = true;
@@ -97,11 +102,11 @@ export class AppComponent implements OnInit {
   xScaleMax: any;
   yScaleMin: number;
   yScaleMax: number;
-  showDataLabel = false;
-  noBarWhenZero = true;
-  trimXAxisTicks = true;
-  trimYAxisTicks = true;
-  rotateXAxisTicks = true;
+  showDataLabel: boolean = false;
+  noBarWhenZero: boolean = true;
+  trimXAxisTicks: boolean = true;
+  trimYAxisTicks: boolean = true;
+  rotateXAxisTicks: boolean = true;
   maxXAxisTickLength = 16;
   maxYAxisTickLength = 16;
 
@@ -145,8 +150,8 @@ export class AppComponent implements OnInit {
   closedCurve: any = this.curves[this.closedCurveType];
   closedInterpolationTypes = ['Basis Closed', 'Cardinal Closed', 'Catmull Rom Closed', 'Linear Closed'];
 
-  colorSets: any;
-  colorScheme: any;
+  colorSets: IColorSet[];
+  colorScheme: IColorSet;
   schemeType: string = 'ordinal';
   selectedColorScheme: string;
   rangeFillOpacity: number = 0.15;
@@ -196,14 +201,14 @@ export class AppComponent implements OnInit {
   // Combo Chart
   barChart: any[] = barChart;
   lineChartSeries: any[] = lineChartSeries;
-  lineChartScheme = {
+  lineChartScheme: IColorSet = {
     name: 'coolthree',
     selectable: true,
     group: 'Ordinal',
     domain: ['#01579b', '#7aa3e5', '#a8385d', '#00bfa5']
   };
 
-  comboBarScheme = {
+  comboBarScheme: IColorSet = {
     name: 'singleLightBlue',
     selectable: true,
     group: 'Ordinal',
@@ -260,6 +265,7 @@ export class AppComponent implements OnInit {
       colorSets,
       graph: generateGraph(50),
       bubble,
+      bubbleActiveEntries,
       plotData: this.generatePlotData(),
       treemap,
       bubbleDemoData,
@@ -273,7 +279,7 @@ export class AppComponent implements OnInit {
 
     this.dateData = generateData(5, false);
     this.dateDataWithRange = generateData(2, true);
-    this.setColorScheme('cool');
+    this.setColorScheme(ColorScheme.cool);
     this.calendarData = this.getCalendarData();
     this.statusData = this.getStatusData();
     this.sparklineData = generateData(1, false, 30);
@@ -477,7 +483,7 @@ export class AppComponent implements OnInit {
     return this.curves[curveType] || this.curves['default'];
   }
 
-  setColorScheme(name) {
+  setColorScheme(name: string) {
     this.selectedColorScheme = name;
     this.colorScheme = this.colorSets.find(s => s.name === name);
   }
@@ -738,7 +744,7 @@ export class AppComponent implements OnInit {
   */
 
   onSelect(event) {
-    console.log(event);
+    console.log('Select Event', event);
   }
 
   dblclick(event) {

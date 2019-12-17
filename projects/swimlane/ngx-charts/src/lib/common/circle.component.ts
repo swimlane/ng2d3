@@ -26,19 +26,19 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CircleComponent implements OnChanges {
-  @Input() cx;
-  @Input() cy;
-  @Input() r;
-  @Input() fill;
-  @Input() stroke;
-  @Input() data;
-  @Input() classNames;
-  @Input() circleOpacity;
-  @Input() pointerEvents;
+  @Input() cx: number;
+  @Input() cy: number;
+  @Input() r: number;
+  @Input() fill: string;
+  @Input() stroke: string;
+  @Input() data: string | number | Date;
+  @Input() classNames: string;
+  @Input() circleOpacity: number;
+  @Input() pointerEvents: string;
 
-  @Output() select = new EventEmitter();
-  @Output() activate = new EventEmitter();
-  @Output() deactivate = new EventEmitter();
+  @Output() select: EventEmitter<string | number | Date> = new EventEmitter();
+  @Output() activate: EventEmitter<string | number | Date> = new EventEmitter();
+  @Output() deactivate: EventEmitter<string | number | Date> = new EventEmitter();
 
   @HostListener('click')
   onClick() {
