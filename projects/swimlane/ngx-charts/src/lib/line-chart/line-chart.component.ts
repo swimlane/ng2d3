@@ -13,7 +13,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
 import { scaleLinear, scaleTime, scalePoint } from 'd3-scale';
 import { curveLinear } from 'd3-shape';
 
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { id } from '../utils/id';
@@ -216,7 +216,7 @@ export class LineChartComponent extends BaseChartComponent {
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
   @ContentChild('seriesTooltipTemplate') seriesTooltipTemplate: TemplateRef<any>;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   xSet: any;
   xDomain: any;
   yDomain: any;

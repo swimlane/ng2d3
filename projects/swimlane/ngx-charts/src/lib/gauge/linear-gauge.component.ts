@@ -10,7 +10,7 @@ import {
 import { scaleLinear } from 'd3-scale';
 
 import { BaseChartComponent } from '../common/base-chart.component';
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 
 @Component({
@@ -106,7 +106,7 @@ export class LinearGaugeComponent extends BaseChartComponent implements AfterVie
   @ViewChild('valueTextEl') valueTextEl: ElementRef;
   @ViewChild('unitsTextEl') unitsTextEl: ElementRef;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   valueDomain: any;
   valueScale: any;
 

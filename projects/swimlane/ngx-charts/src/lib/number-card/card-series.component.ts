@@ -5,20 +5,12 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  TemplateRef
 } from '@angular/core';
 import { invertColor } from '../utils/color-utils';
-
-export interface CardModel {
-  x;
-  y;
-  width: number;
-  height: number;
-  color: string;
-  label: string;
-  data;
-  tooltipText: string;
-}
+import { ColorHelper, IViewDimensions } from '../common';
+import { IGridLayout, ICardModel, NumberCardsChartDataItem } from '../models/chart-data.model';
 
 @Component({
   selector: 'g[ngx-charts-card-series]',
@@ -51,36 +43,48 @@ export interface CardModel {
       [labelFormatting]="labelFormatting"
       [animations]="animations"
       (select)="onClick($event)"
+      ngx-tooltip
+      [tooltipDisabled]="tooltipDisabled"
+      [tooltipPlacement]="tooltipPlacement"
+      [tooltipType]="tooltipType"
+      [tooltipTitle]="tooltipTemplate ? undefined : c.tooltipText"
+      [tooltipTemplate]="tooltipTemplate"
+      [tooltipContext]="c.data"
     />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardSeriesComponent implements OnChanges {
-  @Input() data: any[];
-  @Input() slots: any[];
-  @Input() dims;
-  @Input() colors;
-  @Input() innerPadding = 15;
+  @Input() data: IGridLayout[];
+  @Input() dims: IViewDimensions;
+  @Input() colors: ColorHelper;
+  @Input() innerPadding: number | number[] = 15;
 
-  @Input() cardColor;
-  @Input() bandColor;
-  @Input() emptyColor = 'rgba(0, 0, 0, 0)';
-  @Input() textColor;
-  @Input() valueFormatting: any;
-  @Input() labelFormatting: any;
+  @Input() cardColor: string;
+  @Input() bandColor: string;
+  @Input() emptyColor: string = 'rgba(0, 0, 0, 0)';
+  @Input() textColor: string;
+  @Input() valueFormatting: (val: any) => string;
+  @Input() labelFormatting: (val: any) => string;
   @Input() animations: boolean = true;
+  @Input() tooltipDisabled: boolean = false;
+  @Input() tooltipTemplate: TemplateRef<any>;
 
-  @Output() select = new EventEmitter();
+  @Output() select: EventEmitter<NumberCardsChartDataItem> = new EventEmitter<NumberCardsChartDataItem>();
 
-  cards: CardModel[];
+  cards: ICardModel[];
   emptySlots: any[];
   medianSize: number;
+
+  tooltipPlacement: string;
+  tooltipType: string;
 
   ngOnChanges(changes: SimpleChanges): void {
     this.update();
   }
 
   update(): void {
+    this.updateTooltipSettings();
     if (this.data.length > 2) {
       const valueFormatting = this.valueFormatting || (card => card.value.toLocaleString());
 
@@ -113,7 +117,7 @@ export class CardSeriesComponent implements OnChanges {
 
     return this.data.map((d, index) => {
       let label = d.data.name;
-      if (label && label.constructor.name === 'Date') {
+      if (label && label instanceof Date) {
         label = label.toLocaleDateString();
       } else {
         label = label ? label.toLocaleString() : label;
@@ -137,11 +141,16 @@ export class CardSeriesComponent implements OnChanges {
     });
   }
 
-  trackBy(index, card): string {
+  trackBy(index: number, card: ICardModel): string {
     return card.label;
   }
 
-  onClick(data): void {
+  updateTooltipSettings() {
+    this.tooltipPlacement = this.tooltipDisabled ? undefined : 'top';
+    this.tooltipType = this.tooltipDisabled ? undefined : 'tooltip';
+  }
+
+  onClick(data: NumberCardsChartDataItem): void {
     this.select.emit(data);
   }
 }

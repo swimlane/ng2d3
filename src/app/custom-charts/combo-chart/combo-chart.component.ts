@@ -12,7 +12,7 @@ import {
 
 import { curveLinear } from 'd3-shape';
 import { scaleBand, scaleLinear, scalePoint, scaleTime } from 'd3-scale';
-import { BaseChartComponent, ViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
+import { BaseChartComponent, IViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
 import { LineSeriesComponent } from '@swimlane/ngx-charts/line-chart';
 
 @Component({
@@ -61,7 +61,7 @@ export class ComboChartComponent extends BaseChartComponent {
 
   @ViewChild(LineSeriesComponent) lineSeriesComponent: LineSeriesComponent;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   xScale: any;
   yScale: any;
   xDomain: any;

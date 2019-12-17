@@ -11,7 +11,7 @@ import {
 import { min } from 'd3-array';
 import { format } from 'd3-format';
 
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { trimLabel } from '../common/trim-label.helper';
@@ -100,7 +100,7 @@ export class PieGridComponent extends BaseChartComponent {
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   data: any[];
   transform: string;
   series: any[];

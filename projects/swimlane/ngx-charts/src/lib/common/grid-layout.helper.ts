@@ -1,6 +1,8 @@
-import { scaleBand } from 'd3-scale';
+import { scaleBand, ScaleBand } from 'd3-scale';
+import { IViewDimensions } from './view-dimensions.helper';
+import { NumberCardsChartDataItem, IGridLayout } from '../models/chart-data.model';
 
-export function gridSize(dims, len, minWidth) {
+export function gridSize(dims: IViewDimensions, len: number, minWidth: number) {
   let rows = 1;
   let cols = len;
   const width = dims.width;
@@ -15,9 +17,14 @@ export function gridSize(dims, len, minWidth) {
   return [cols, rows];
 }
 
-export function gridLayout(dims, data, minWidth, designatedTotal) {
-  const xScale: any = scaleBand<number>();
-  const yScale: any = scaleBand<number>();
+export function gridLayout(
+  dims: IViewDimensions,
+  data: NumberCardsChartDataItem[],
+  minWidth: number,
+  designatedTotal: number
+): IGridLayout[] {
+  const xScale: ScaleBand<number> = scaleBand<number>();
+  const yScale: ScaleBand<number> = scaleBand<number>();
   const width = dims.width;
   const height = dims.height;
 
@@ -34,33 +41,37 @@ export function gridLayout(dims, data, minWidth, designatedTotal) {
   xScale.domain(xDomain);
   yScale.domain(yDomain);
 
-  xScale.rangeRound([0, width], 0.1);
-  yScale.rangeRound([0, height], 0.1);
+  // v4’s .rangeRound() and .padding() replaced v3’s rangeRoundBands().
+  xScale.rangeRound([0, width]);
+  xScale.padding(0.1);
+  yScale.rangeRound([0, height]);
+  yScale.padding(0.1);
 
-  const res = [];
+  const res: IGridLayout[] = [];
   const total = designatedTotal ? designatedTotal : getTotal(data);
   const cardWidth = xScale.bandwidth();
   const cardHeight = yScale.bandwidth();
 
   for (let i = 0; i < data.length; i++) {
-    res[i] = {};
-    res[i].data = {
-      name: data[i] ? data[i].name : '',
-      value: data[i] ? data[i].value : undefined,
-      extra: data[i] ? data[i].extra : undefined,
-      label: data[i] ? data[i].label : ''
-    };
-    res[i].x = xScale(i % columns);
-    res[i].y = yScale(Math.floor(i / columns));
-    res[i].width = cardWidth;
-    res[i].height = cardHeight;
-    res[i].data.percent = total > 0 ? res[i].data.value / total : 0;
-    res[i].data.total = total;
+    const item = data[i];
+    res.push({
+      data: {
+        name: item && item.name ? item.name : '',
+        value: item && item.value ? item.value : undefined,
+        extra: item && item.extra ? item.extra : undefined,
+        label: item && item.label ? item.label : ''
+      },
+      x: xScale(i % columns),
+      y: yScale(Math.floor(i / columns)),
+      width: cardWidth,
+      height: cardHeight,
+      percent: total > 0 ? item.value / total : 0,
+      total: total ? total : 0
+    });
   }
-
   return res;
 }
 
-function getTotal(results) {
+function getTotal(results: NumberCardsChartDataItem[]): number {
   return results.map(d => (d ? d.value : 0)).reduce((sum, val) => sum + val, 0);
 }

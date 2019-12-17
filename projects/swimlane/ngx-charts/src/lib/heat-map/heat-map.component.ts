@@ -11,7 +11,7 @@ import {
 import { scaleBand } from 'd3-scale';
 
 import { BaseChartComponent } from '../common/base-chart.component';
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { getScaleType } from '../common/domain.helper';
 
@@ -116,7 +116,7 @@ export class HeatMapComponent extends BaseChartComponent {
 
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   xDomain: any[];
   yDomain: any[];
   valueDomain: any[];

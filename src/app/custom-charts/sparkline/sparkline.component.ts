@@ -3,7 +3,7 @@ import { scaleLinear, scaleTime, scalePoint } from 'd3-scale';
 import { curveLinear } from 'd3-shape';
 
 import { getUniqueXDomainValues } from '@swimlane/ngx-charts/common/domain.helper';
-import { BaseChartComponent, ViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
+import { BaseChartComponent, IViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -33,13 +33,13 @@ import { BaseChartComponent, ViewDimensions, ColorHelper, calculateViewDimension
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SparklineComponent extends BaseChartComponent {
-  @Input() autoScale = false;
+  @Input() autoScale: boolean = false;
   @Input() curve: any = curveLinear;
   @Input() schemeType: string = 'linear';
   @Input() valueDomain: number[];
   @Input() animations: boolean = true;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   xSet: any;
   xDomain: any;
   yDomain: any;

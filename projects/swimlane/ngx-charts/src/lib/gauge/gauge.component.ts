@@ -14,7 +14,7 @@ import {
 import { scaleLinear } from 'd3-scale';
 
 import { BaseChartComponent } from '../common/base-chart.component';
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 
 @Component({
@@ -110,7 +110,7 @@ export class GaugeComponent extends BaseChartComponent implements AfterViewInit 
 
   @ViewChild('textEl') textEl: ElementRef;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   domain: any[];
   valueDomain: any;
   valueScale: any;

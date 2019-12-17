@@ -15,7 +15,7 @@ import { scaleLinear } from 'd3-scale';
 import { getDomain, getScale } from '@swimlane/ngx-charts/bubble-chart/bubble-chart.utils';
 import { getScaleType } from '@swimlane/ngx-charts/common/domain.helper';
 import { id } from '@swimlane/ngx-charts//utils/id';
-import { BaseChartComponent, ViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
+import { BaseChartComponent, IViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -150,7 +150,7 @@ export class BubbleChartInteractiveComponent extends BaseChartComponent {
 
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   colors: ColorHelper;
   scaleType = 'linear';
   margin = [10, 20, 10, 20];

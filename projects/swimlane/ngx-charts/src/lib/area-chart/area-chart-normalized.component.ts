@@ -12,7 +12,7 @@ import {
 import { scaleLinear, scalePoint, scaleTime } from 'd3-scale';
 import { curveLinear } from 'd3-shape';
 
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { id } from '../utils/id';
@@ -191,7 +191,7 @@ export class AreaChartNormalizedComponent extends BaseChartComponent {
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
   @ContentChild('seriesTooltipTemplate') seriesTooltipTemplate: TemplateRef<any>;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   scaleType: string;
   xDomain: any[];
   xSet: any[]; // the set of all values on the X Axis

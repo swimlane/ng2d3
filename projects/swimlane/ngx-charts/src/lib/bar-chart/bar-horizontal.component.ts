@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { scaleBand, scaleLinear } from 'd3-scale';
 
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 
@@ -123,7 +123,7 @@ export class BarHorizontalComponent extends BaseChartComponent {
 
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   yScale: any;
   xScale: any;
   xDomain: any;

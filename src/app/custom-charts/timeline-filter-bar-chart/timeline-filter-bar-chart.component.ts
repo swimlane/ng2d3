@@ -4,7 +4,7 @@ import { brushX } from 'd3-brush';
 import { select, event as d3event } from 'd3-selection';
 
 import { id } from '@swimlane/ngx-charts/utils';
-import { BaseChartComponent, ViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
+import { BaseChartComponent, IViewDimensions, ColorHelper, calculateViewDimensions } from '@swimlane/ngx-charts/common';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -84,7 +84,7 @@ export class TimelineFilterBarChartComponent extends BaseChartComponent {
 
   @Output() onFilter = new EventEmitter();
 
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   xSet: any;
   xDomain: any;
   yDomain: any;

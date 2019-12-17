@@ -12,7 +12,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
 import { scaleLinear, scaleTime, scalePoint } from 'd3-scale';
 import { curveCardinalClosed } from 'd3-shape';
 
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { getScaleType } from '../common/domain.helper';
@@ -165,8 +165,8 @@ export class PolarChartComponent extends BaseChartComponent {
 
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
 
-  dims: ViewDimensions;
-  yAxisDims: ViewDimensions;
+  dims: IViewDimensions;
+  yAxisDims: IViewDimensions;
   labelOffset: number;
   xDomain: any;
   yDomain: any;

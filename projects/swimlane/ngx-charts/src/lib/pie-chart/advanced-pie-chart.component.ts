@@ -9,7 +9,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { calculateViewDimensions, ViewDimensions } from '../common/view-dimensions.helper';
+import { calculateViewDimensions, IViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { DataItem } from '../models/chart-data.model';
@@ -75,7 +75,7 @@ export class AdvancedPieChartComponent extends BaseChartComponent {
   @ContentChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
 
   data: any;
-  dims: ViewDimensions;
+  dims: IViewDimensions;
   domain: any[];
   outerRadius: number;
   innerRadius: number;
