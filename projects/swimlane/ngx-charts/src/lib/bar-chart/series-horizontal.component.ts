@@ -89,7 +89,7 @@ export class SeriesHorizontal implements OnChanges {
   @Input() activeEntries: any[];
   @Input() seriesName: string;
   @Input() tooltipTemplate: TemplateRef<any>;
-  @Input() roundEdges: boolean;
+  @Input() roundEdges: boolean = false;
   @Input() animations: boolean = true;
   @Input() showDataLabel: boolean = false;
   @Input() dataLabelFormatting: any;

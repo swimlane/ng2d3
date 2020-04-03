@@ -80,7 +80,7 @@ export class SeriesVerticalComponent implements OnChanges {
   @Input() seriesName: string;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
-  @Input() roundEdges: boolean;
+  @Input() roundEdges: boolean = false;
   @Input() animations: boolean = true;
   @Input() showDataLabel: boolean = false;
   @Input() dataLabelFormatting: any;
