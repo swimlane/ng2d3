@@ -2,6 +2,10 @@
   float: left;
   overflow: visible;
 
+  [dir='rtl'] & {
+    direction: ltr;
+  }
+
   .circle,
   .bar,
   .arc {
@@ -110,5 +114,11 @@
         fill: rgba(0, 0, 0, 0.05);
       }
     }
+  }
+}
+
+.ngx-charts-outer {
+  [dir='rtl'] .advanced-pie & {
+    width: inherit !important;
   }
 }

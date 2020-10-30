@@ -46,6 +46,7 @@ export class AppComponent implements OnInit {
   APP_VERSION = version;
 
   theme = 'dark';
+  dir = 'ltr';
   chartType: string;
   chartGroups: any[];
   chart: any;

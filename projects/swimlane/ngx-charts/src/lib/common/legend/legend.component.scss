@@ -10,6 +10,11 @@
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: bold;
+
+    [dir='rtl'] & {
+      margin-left: inherit;
+      margin-right: 10px;
+    }
   }
 
   ul,
@@ -40,6 +45,11 @@
     overflow-x: hidden;
     white-space: nowrap;
     background: rgba(0, 0, 0, 0.05);
+
+    [dir='rtl'] & {
+      float: right;
+      text-align: right;
+    }
   }
 
   .legend-label {

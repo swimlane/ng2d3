@@ -1,5 +1,5 @@
 <main [class]="theme">
-  <div class="chart-col">
+  <div class="chart-col" [attr.dir]="dir">
     <div style="position: absolute; top: 50px; left: 50px; right: 50px; bottom: 50px;">
       <ngx-charts-bar-vertical
         *ngIf="chartType === 'bar-vertical'"
@@ -1117,6 +1117,12 @@
       <select [ngModel]="theme" (ngModelChange)="theme = $event">
         <option [value]="'dark'">Dark</option>
         <option [value]="'light'">Light</option>
+      </select>
+
+      <h3>Direction</h3>
+      <select [ngModel]="dir" (ngModelChange)="dir = $event">
+        <option [value]="'ltr'">Left to right</option>
+        <option [value]="'rtl'">Right to left</option>
       </select>
 
       <h3 (click)="dataVisible = !dataVisible" style="cursor: pointer;">
