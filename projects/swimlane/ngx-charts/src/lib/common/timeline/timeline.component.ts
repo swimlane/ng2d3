@@ -47,6 +47,8 @@ export class Timeline implements OnChanges {
   @Input() miniChart;
   @Input() autoScale;
   @Input() scaleType;
+  @Input() xScaleMin: any;
+  @Input() xScaleMax: any;
   @Input() height: number = 50;
 
   @Output() select = new EventEmitter();
@@ -108,13 +110,13 @@ export class Timeline implements OnChanges {
 
     let domain = [];
     if (this.scaleType === 'time') {
-      const min = Math.min(...values);
-      const max = Math.max(...values);
+      const min = this.xScaleMin ? this.xScaleMin : Math.min(...values);
+      const max = this.xScaleMax ? this.xScaleMax : Math.max(...values);
       domain = [min, max];
     } else if (this.scaleType === 'linear') {
       values = values.map(v => Number(v));
-      const min = Math.min(...values);
-      const max = Math.max(...values);
+      const min = this.xScaleMin ? this.xScaleMin : Math.min(...values);
+      const max = this.xScaleMax ? this.xScaleMax : Math.max(...values);
       domain = [min, max];
     } else {
       domain = values;
