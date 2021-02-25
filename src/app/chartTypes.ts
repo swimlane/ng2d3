@@ -300,6 +300,7 @@ const chartGroups = [
           'arcWidth',
           'explodeSlices',
           'showLabels',
+          'maxLabelLength',
           'tooltipDisabled'
         ]
       },

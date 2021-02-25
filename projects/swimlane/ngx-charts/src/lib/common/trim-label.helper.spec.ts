@@ -12,7 +12,7 @@ describe('trimLabel', () => {
     expect(trimLabel(() => false)).toEqual('');
   });
 
-  it('returns empty string when pssing null or undefined', () => {
+  it('returns empty string when passing null or undefined', () => {
     expect(trimLabel(undefined)).toEqual('');
     expect(trimLabel(null)).toEqual('');
   });

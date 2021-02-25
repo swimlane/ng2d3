@@ -38,13 +38,13 @@ import { trimLabel } from '../common/trim-label.helper';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PieLabelComponent implements OnChanges {
-  @Input() data;
-  @Input() radius;
+  @Input() data: any;
+  @Input() radius: number;
   @Input() label;
   @Input() color;
-  @Input() max;
-  @Input() value;
-  @Input() explodeSlices;
+  @Input() max: number;
+  @Input() value: number;
+  @Input() explodeSlices: boolean;
   @Input() animations: boolean = true;
   @Input() labelTrim: boolean = true;
   @Input() labelTrimSize: number = 10;

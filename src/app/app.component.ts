@@ -163,6 +163,7 @@ export class AppComponent implements OnInit {
   showLabels = true;
   explodeSlices = false;
   doughnut = false;
+  maxLabelLength: number = 15;
   arcWidth = 0.25;
 
   // line, area
