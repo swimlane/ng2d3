@@ -10,7 +10,7 @@ export function getDomain(values, scaleType, autoScale, minVal?, maxVal?): numbe
   }
 
   if (scaleType === 'time' || scaleType === 'linear') {
-    const min = minVal ? minVal : Math.min(...values);
+    const min = minVal || minVal === 0 ? minVal : Math.min(...values);
     const max = maxVal ? maxVal : Math.max(...values);
 
     domain = [min, max];
