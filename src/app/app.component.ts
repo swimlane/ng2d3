@@ -164,6 +164,7 @@ export class AppComponent implements OnInit {
   explodeSlices = false;
   doughnut = false;
   arcWidth = 0.25;
+  explodeOnHover: boolean = false;
 
   // line, area
   autoScale = true;

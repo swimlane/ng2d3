@@ -303,6 +303,7 @@
         [legendTitle]="legendTitle"
         [legendPosition]="legendPosition"
         [explodeSlices]="explodeSlices"
+        [explodeOnHover]="explodeOnHover"
         [labels]="showLabels"
         [doughnut]="doughnut"
         [arcWidth]="arcWidth"
@@ -1381,6 +1382,13 @@
           <label>
             <input type="checkbox" [checked]="explodeSlices" (change)="explodeSlices = $event.target.checked" />
             Explode Slices
+          </label>
+          <br />
+        </div>
+        <div *ngIf="chart.options.includes('explodeOnHover')">
+          <label>
+            <input type="checkbox" [checked]="explodeOnHover" (change)="explodeOnHover = $event.target.checked" />
+            Explode on Hover
           </label>
           <br />
         </div>

@@ -39,6 +39,7 @@ import { DataItem } from '../models/chart-data.model';
           [innerRadius]="innerRadius"
           [outerRadius]="outerRadius"
           [explodeSlices]="explodeSlices"
+          [explodeOnHover]="explodeOnHover"
           [gradient]="gradient"
           [animations]="animations"
           [tooltipDisabled]="tooltipDisabled"
@@ -71,6 +72,7 @@ export class PieChartComponent extends BaseChartComponent {
   @Input() trimLabels: boolean = true;
   @Input() maxLabelLength: number = 10;
   @Input() tooltipText: any;
+  @Input() explodeOnHover: boolean;
   @Output() dblclick = new EventEmitter();
   // optional margins
   @Input() margins: number[];
