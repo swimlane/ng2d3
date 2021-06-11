@@ -1,0 +1,193 @@
+<ngx-charts-chart
+  (legendLabelActivate)="onActivate($event)"
+  (legendLabelClick)="onClick($event)"
+  (legendLabelDeactivate)="onDeactivate($event)"
+  [activeEntries]="activeEntries"
+  [animations]="animations"
+  [legendOptions]="legendOptions"
+  [showLegend]="legend"
+  [view]="[width, height]"
+>
+  <svg:defs>
+    <svg:clipPath [attr.id]="clipPathId">
+      <svg:rect
+        [attr.height]="dims.height + 10"
+        [attr.transform]="'translate(-5, -5)'"
+        [attr.width]="dims.width + 10"
+      />
+    </svg:clipPath>
+  </svg:defs>
+  <svg:g [attr.transform]="transform" class="line-chart chart">
+    <svg:g
+      (dimensionsChanged)="updateXAxisHeight($event)"
+      *ngIf="xAxis"
+      [dims]="dims"
+      [labelText]="xAxisLabel"
+      [maxTickLength]="maxXAxisTickLength"
+      [rotateTicks]="rotateXAxisTicks"
+      [showGridLines]="showGridLines"
+      [showLabel]="showXAxisLabel"
+      [tickFormatting]="xAxisTickFormatting"
+      [ticks]="xAxisTicks"
+      [trimTicks]="trimXAxisTicks"
+      [xScale]="xScale"
+      ngx-charts-x-axis
+    ></svg:g>
+    <svg:g
+      (dimensionsChanged)="updateYAxisWidth($event)"
+      *ngIf="yAxis"
+      [dims]="dims"
+      [labelText]="yAxisLabel"
+      [maxTickLength]="maxYAxisTickLength"
+      [referenceLines]="referenceLines"
+      [showGridLines]="showGridLines"
+      [showLabel]="showYAxisLabel"
+      [showRefLabels]="showRefLabels"
+      [showRefLines]="showRefLines"
+      [tickFormatting]="yAxisTickFormatting"
+      [ticks]="yAxisTicks"
+      [trimTicks]="trimYAxisTicks"
+      [yOrient]="yOrient"
+      [yScale]="yScale"
+      ngx-charts-y-axis
+    ></svg:g>
+    <svg:g
+      (dimensionsChanged)="updateSecondaryYAxisWidth($event)"
+      *ngIf="secondaryYAxis"
+      [dims]="dims"
+      [labelText]="secondaryYAxisLabel"
+      [maxTickLength]="maxSecondaryYAxisTickLength"
+      [referenceLines]="secondaryReferenceLines"
+      [showGridLines]="false"
+      [showLabel]="showSecondaryYAxisLabel"
+      [showRefLabels]="showRefLabels"
+      [showRefLines]="showRefLines"
+      [tickFormatting]="secondaryYAxisTickFormatting"
+      [ticks]="secondaryYAxisTicks"
+      [trimTicks]="trimSecondaryYAxisTicks"
+      [yOrient]="secondaryYOrient"
+      [yScale]="secondaryYScale"
+      ngx-charts-y-axis
+    ></svg:g>
+    <svg:g [attr.clip-path]="clipPath">
+      <svg:g *ngFor="let series of results; trackBy: trackBy" [@animationState]="'active'">
+        <svg:g
+          [activeEntries]="activeEntries"
+          [animations]="animations"
+          [colors]="colors"
+          [curve]="curve"
+          [data]="series"
+          [hasRange]="hasRange"
+          [rangeFillOpacity]="rangeFillOpacity"
+          [scaleType]="scaleType"
+          [xScale]="xScale"
+          [yScale]="yScale"
+          ngx-charts-line-series
+        />
+      </svg:g>
+      <svg:g *ngFor="let series of secondaryResults; trackBy: trackBy" [@animationState]="'active'">
+        <svg:g
+          [activeEntries]="activeEntries"
+          [animations]="animations"
+          [colors]="colors"
+          [curve]="curve"
+          [data]="series"
+          [hasRange]="hasRange"
+          [rangeFillOpacity]="rangeFillOpacity"
+          [scaleType]="scaleType"
+          [xScale]="xScale"
+          [yScale]="secondaryYScale"
+          ngx-charts-line-series
+        />
+      </svg:g>
+      <svg:g (mouseleave)="hideCircles()" *ngIf="!tooltipDisabled">
+        <svg:g
+          (hover)="updateHoveredVertical($event)"
+          [colors]="colors"
+          [dims]="dims"
+          [results]="allResults"
+          [tooltipDisabled]="tooltipDisabled"
+          [tooltipTemplate]="seriesTooltipTemplate"
+          [xScale]="xScale"
+          [xSet]="xSet"
+          [yScale]="yScale"
+          ngx-charts-tooltip-area
+        />
+        <svg:g *ngFor="let series of results">
+          <svg:g
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+            (select)="onClick($event)"
+            [activeEntries]="activeEntries"
+            [colors]="colors"
+            [data]="series"
+            [scaleType]="scaleType"
+            [tooltipDisabled]="tooltipDisabled"
+            [tooltipTemplate]="tooltipTemplate"
+            [visibleValue]="hoveredVertical"
+            [xScale]="xScale"
+            [yScale]="yScale"
+            ngx-charts-circle-series
+          />
+        </svg:g>
+        <svg:g *ngFor="let series of secondaryResults">
+          <svg:g
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+            (select)="onClick($event)"
+            [activeEntries]="activeEntries"
+            [colors]="colors"
+            [data]="series"
+            [scaleType]="scaleType"
+            [tooltipDisabled]="tooltipDisabled"
+            [tooltipTemplate]="tooltipTemplate"
+            [visibleValue]="hoveredVertical"
+            [xScale]="xScale"
+            [yScale]="secondaryYScale"
+            ngx-charts-circle-series
+          />
+        </svg:g>
+      </svg:g>
+    </svg:g>
+  </svg:g>
+  <svg:g
+    (onDomainChange)="updateDomain($event)"
+    *ngIf="timeline && scaleType != 'ordinal'"
+    [attr.transform]="timelineTransform"
+    [customColors]="customColors"
+    [height]="timelineHeight"
+    [legend]="legend"
+    [results]="allResults"
+    [scaleType]="scaleType"
+    [scheme]="scheme"
+    [view]="[timelineWidth, height]"
+    ngx-charts-timeline
+  >
+    <svg:g *ngFor="let series of results; trackBy: trackBy">
+      <svg:g
+        [animations]="animations"
+        [colors]="colors"
+        [curve]="curve"
+        [data]="series"
+        [hasRange]="hasRange"
+        [scaleType]="scaleType"
+        [xScale]="timelineXScale"
+        [yScale]="timelineYScale"
+        ngx-charts-line-series
+      />
+    </svg:g>
+    <svg:g *ngFor="let series of secondaryResults; trackBy: trackBy">
+      <svg:g
+        [animations]="animations"
+        [colors]="colors"
+        [curve]="curve"
+        [data]="series"
+        [hasRange]="hasRange"
+        [scaleType]="scaleType"
+        [xScale]="timelineXScale"
+        [yScale]="timelineSecondaryYScale"
+        ngx-charts-line-series
+      />
+    </svg:g>
+  </svg:g>
+</ngx-charts-chart>

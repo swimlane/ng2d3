@@ -1092,6 +1092,53 @@
       (deactivate)="deactivate($event)"
     >
     </ngx-charts-bar-horizontal-stacked>
+    <custom-double-line-chart
+      *ngIf="chartType === 'custom-double-line-chart'"
+      class="chart-container"
+      [view]="view"
+      [scheme]="colorScheme"
+      [schemeType]="schemeType"
+      [animations]="animations"
+      [rangeFillOpacity]="rangeFillOpacity"
+      [legend]="showLegend"
+      [legendTitle]="legendTitle"
+      [legendPosition]="legendPosition"
+      (legendLabelClick)="onLegendLabelClick($event)"
+      [showGridLines]="showGridLines"
+      [autoScale]="autoScale"
+      [gradient]="gradient"
+      [curve]="curve"
+      [roundDomains]="roundDomains"
+      [xAxis]="showXAxis"
+      [showXAxisLabel]="showXAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [xScaleMin]="xScaleMin"
+      [xScaleMax]="xScaleMax"
+      [trimXAxisTicks]="trimXAxisTicks"
+      [rotateXAxisTicks]="rotateXAxisTicks"
+      [maxXAxisTickLength]="maxXAxisTickLength"
+      [results]="dateData"
+      [yAxis]="showYAxis"
+      [showYAxisLabel]="showYAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [yScaleMin]="yScaleMin"
+      [yScaleMax]="yScaleMax"
+      [trimYAxisTicks]="trimYAxisTicks"
+      [maxYAxisTickLength]="maxYAxisTickLength"
+      [secondaryResults]="secondaryDateData"
+      [secondaryYAxisLabel]="secondaryYAxisLabel"
+      [secondaryYAxis]="showSecondaryYAxis"
+      [secondaryYScaleMax]="secondaryYScaleMax"
+      [secondaryYScaleMin]="secondaryYScaleMin"
+      [showSecondaryYAxisLabel]="showSecondaryYAxisLabel"
+      [maxSecondaryYAxisTickLength]="maxSecondaryYAxisTickLength"
+      [timeline]="timeline"
+      [tooltipDisabled]="tooltipDisabled"
+      (select)="select($event)"
+      (activate)="activate($event)"
+      (deactivate)="deactivate($event)"
+    >
+    </custom-double-line-chart>
   </div>
   <div class="sidebar">
     <h1>
@@ -1130,7 +1177,9 @@
         <pre *ngIf="chart.inputFormat === 'comboChart'">{{ barChart | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'comboChart'">{{ lineChartSeries | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'timelineFilter'">{{ timelineFilterBarData | json }}</pre>
-        <div>
+        <pre *ngIf="chart.inputFormat === 'doubleLineChart'">{{ dateData | json }}</pre>
+        <pre *ngIf="chart.inputFormat === 'doubleLineChart'">{{ secondaryDateData | json }}</pre>
+        <div *ngIf="chartType !== 'custom-double-line-chart'">
           <label>
             <input type="checkbox" [checked]="realTimeData" (change)="realTimeData = $event.target.checked" />
             Real-time
@@ -1231,6 +1280,17 @@
           <label>
             <input type="checkbox" [checked]="showYAxis" (change)="showYAxis = $event.target.checked" />
             Show Y Axis
+          </label>
+          <br />
+        </div>
+        <div *ngIf="chart.options.includes('showSecondaryYAxis')">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="showSecondaryYAxis"
+              (change)="showSecondaryYAxis = $event.target.checked"
+            />
+            Show Secondary Y Axis
           </label>
           <br />
         </div>
@@ -1337,6 +1397,10 @@
           <label>Y Axis Label:</label><br />
           <input type="text" [(ngModel)]="yAxisLabel" /><br />
         </div>
+        <div *ngIf="chart.options.includes('secondaryYAxisLabel')">
+          <label>Secondary Y Axis Label:</label><br />
+          <input type="text" [(ngModel)]="secondaryYAxisLabel" /><br />
+        </div>
         <div *ngIf="chart.options.includes('showLabels')">
           <label>
             <input type="checkbox" [checked]="showLabels" (change)="showLabels = $event.target.checked" />
@@ -1365,6 +1429,21 @@
         <div *ngIf="chart.options.includes('maxYAxisTickLength')">
           <label>Max Y Axis Tick Length:</label><br />
           <input type="text" [(ngModel)]="maxYAxisTickLength" /><br />
+        </div>
+        <div *ngIf="chart.options.includes('trimSecondaryYAxisTicks')">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="trimSecondaryYAxisTicks"
+              (change)="trimSecondaryYAxisTicks = $event.target.checked"
+            />
+            Trim Secondary Y Axis Ticks
+          </label>
+          <br />
+        </div>
+        <div *ngIf="chart.options.includes('maxSecondaryYAxisTickLength')">
+          <label>Max Secondary Y Axis Tick Length:</label><br />
+          <input type="text" [(ngModel)]="maxSecondaryYAxisTickLength" /><br />
         </div>
         <div *ngIf="chart.options.includes('doughnut')">
           <label>
@@ -1527,6 +1606,14 @@
         <div *ngIf="chart.options.includes('yScaleMax')">
           <label>Maximum Y-Scale value</label><br />
           <input type="number" [(ngModel)]="yScaleMax" /><br />
+        </div>
+        <div *ngIf="chart.options.includes('secondaryYScaleMin')">
+          <label>Minimum Secondary Y-Scale value</label><br />
+          <input type="number" [(ngModel)]="secondaryYScaleMin" /><br />
+        </div>
+        <div *ngIf="chart.options.includes('secondaryYScaleMax')">
+          <label>Maximum Secondary Y-Scale value</label><br />
+          <input type="number" [(ngModel)]="secondaryYScaleMax" /><br />
         </div>
       </div>
       <h3><a href="https://swimlane.gitbooks.io/ngx-charts/content/" target="_blank">Documentation</a></h3>

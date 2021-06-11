@@ -893,6 +893,60 @@ const chartGroups = [
           'maxXAxisTickLength',
           'maxYAxisTickLength'
         ]
+      },
+      {
+        name: 'Double Line Chart',
+        selector: 'custom-double-line-chart',
+        inputFormat: 'doubleLineChart',
+        options: [
+          'animations',
+          'colorScheme',
+          'schemeType',
+          'gradient',
+          'rangeFillOpacity',
+
+          'showLegend',
+          'legendTitle',
+          'legendPosition',
+
+          'timeline',
+          'tooltipDisabled',
+
+          'autoScale',
+          'showGridLines',
+          'curve',
+          'roundDomains',
+
+          'showXAxis',
+          'showXAxisLabel',
+          'xAxisLabel',
+          'xScaleMin',
+          'xScaleMax',
+          'trimXAxisTicks',
+          'rotateXAxisTicks',
+          'maxXAxisTickLength',
+
+          'showYAxis',
+          'showYAxisLabel',
+          'yAxisLabel',
+          'yScaleMin',
+          'yScaleMax',
+          'trimYAxisTicks',
+          'maxYAxisTickLength',
+
+          'showRefLines',
+          'referenceLines',
+          'secondaryReferenceLines',
+          'showRefLabels',
+
+          'showSecondaryYAxis',
+          'showSecondaryYAxisLabel',
+          'secondaryYAxisLabel',
+          'secondaryYScaleMin',
+          'secondaryYScaleMax',
+          'trimSecondaryYAxisTicks',
+          'maxSecondaryYAxisTickLength'
+        ]
       }
     ]
   }

@@ -349,7 +349,12 @@ export function timelineFilterBarData(): SingleSeries {
   return results;
 }
 
-export function generateData(seriesLength: number, includeMinMaxRange: boolean, dataPoints: number = 5): MultiSeries {
+export function generateData(
+  seriesLength: number,
+  includeMinMaxRange: boolean,
+  dataPoints: number = 5,
+  smallValues: boolean = false
+): MultiSeries {
   const results: MultiSeries = [];
 
   const domain: Date[] = []; // array of time stamps in milliseconds
@@ -367,7 +372,12 @@ export function generateData(seriesLength: number, includeMinMaxRange: boolean, 
     };
 
     for (let j = 0; j < domain.length; j++) {
-      const value = Math.floor(2000 + Math.random() * 5000);
+      let value = 0;
+      if (!smallValues) {
+        value = Math.floor(2000 + Math.random() * 5000);
+      } else {
+        value = Math.floor(10 + Math.random() * 5);
+      }
       // let timestamp = Math.floor(1473700105009 + Math.random() * 1000000000);
       const timestamp = domain[j];
       if (includeMinMaxRange) {

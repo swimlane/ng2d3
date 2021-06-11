@@ -1,0 +1,115 @@
+.ngx-charts {
+  float: left;
+  overflow: visible;
+
+  .circle,
+  .bar,
+  .arc {
+    cursor: pointer;
+  }
+
+  .bar,
+  .cell,
+  .arc,
+  .card {
+    &.active,
+    &:hover {
+      opacity: 0.8;
+      transition: opacity 100ms ease-in-out;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  g {
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .line-series,
+  .line-series-range,
+  .polar-series-path,
+  .polar-series-area,
+  .area-series {
+    &.inactive {
+      transition: opacity 100ms ease-in-out;
+      opacity: 0.2;
+    }
+  }
+
+  .line-highlight {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+
+  .area {
+    opacity: 0.6;
+  }
+
+  .circle {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .label {
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  .tooltip-anchor {
+    fill: rgb(0, 0, 0);
+  }
+
+  .gridline-path {
+    stroke: #ddd;
+    stroke-width: 1;
+    fill: none;
+  }
+
+  .refline-path {
+    stroke: #a8b2c7;
+    stroke-width: 1;
+    stroke-dasharray: 5;
+    stroke-dashoffset: 5;
+  }
+
+  .refline-label {
+    font-size: 9px;
+  }
+
+  .reference-area {
+    fill-opacity: 0.05;
+    fill: #000;
+  }
+
+  .gridline-path-dotted {
+    stroke: #ddd;
+    stroke-width: 1;
+    fill: none;
+    stroke-dasharray: 1, 20;
+    stroke-dashoffset: 3;
+  }
+
+  .grid-panel {
+    rect {
+      fill: none;
+    }
+
+    &.odd {
+      rect {
+        fill: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+}

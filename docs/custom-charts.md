@@ -14,6 +14,7 @@ The charts under the 'Demos' group in our demo page are not distributed with the
 - [Sparkline](https://github.com/swimlane/ngx-charts/tree/master/src/app/custom-charts/sparkline)
 - [Timeline filter bar chart](https://github.com/swimlane/ngx-charts/tree/master/src/app/custom-charts/timeline-filter-bar-chart)
 - [Bubble Chart Interactive Drilldown](https://github.com/swimlane/ngx-charts/tree/master/src/app/custom-charts/bubble-chart-interactive)
+- [Double Line Chart](https://github.com/swimlane/ngx-charts/tree/master/src/app/custom-charts/double-line-chart)
 
 _If you want to have your custom chart featured above, please submit a pull request to_ [_this file_](https://github.com/swimlane/ngx-charts/blob/master/docs/custom-charts.md)_._
 
