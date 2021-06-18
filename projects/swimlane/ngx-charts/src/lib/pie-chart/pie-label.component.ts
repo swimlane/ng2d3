@@ -16,11 +16,8 @@ import { DataItem } from '../models/chart-data.model';
 
 export interface PieData extends DefaultArcObject {
   data: DataItem;
-  endAngle: number;
   index: number;
-  padAngle: number;
   pos: [number, number];
-  startAngle: number;
   value: number;
 }
 

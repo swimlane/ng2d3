@@ -1,4 +1,4 @@
-import { scaleLinear, scalePoint, scaleTime } from 'd3-scale';
+import { ScaleLinear, scaleLinear, ScalePoint, scalePoint, ScaleTime, scaleTime } from 'd3-scale';
 import { ScaleType } from '../common/types';
 
 export function getDomain(
@@ -28,20 +28,27 @@ export function getDomain(
   return domain;
 }
 
-export function getScale(domain: number[], range: number[], scaleType: ScaleType, roundDomains: boolean): any {
-  let scale: any;
-
-  if (scaleType === ScaleType.Time) {
-    scale = scaleTime().range(range).domain(domain);
-  } else if (scaleType === ScaleType.Linear) {
-    scale = scaleLinear().range(range).domain(domain);
-
-    if (roundDomains) {
-      scale = scale.nice();
+export function getScale(
+  domain: number[],
+  range: number[],
+  scaleType: ScaleType,
+  roundDomains: boolean
+): ScaleTime<number, number> | ScaleLinear<number, number> | ScalePoint<string> {
+  switch (scaleType) {
+    case ScaleType.Time:
+      return scaleTime().range(range).domain(domain);
+    case ScaleType.Linear: {
+      const scale = scaleLinear().range(range).domain(domain);
+      if (roundDomains) {
+        return scale.nice();
+      }
+      return scale;
     }
-  } else if (scaleType === ScaleType.Ordinal) {
-    scale = scalePoint().range([range[0], range[1]]).domain(domain);
+    case ScaleType.Ordinal:
+      return scalePoint()
+        .range([range[0], range[1]])
+        .domain(domain.map(r => r.toString()));
+    default:
+      return undefined;
   }
-
-  return scale;
 }

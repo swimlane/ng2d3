@@ -690,6 +690,36 @@
         (deactivate)="deactivate($event)"
       >
       </ngx-charts-number-card>
+      <ngx-charts-box-chart
+        *ngIf="chartType === 'box-plot'"
+        class="chart-container"
+        [view]="view"
+        [results]="boxData"
+        [scheme]="colorScheme"
+        [schemeType]="schemeType"
+        [customColors]="customColors"
+        [strokeColor]="strokeColor"
+        [strokeWidth]="strokeWidth"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [legendTitle]="legendTitle"
+        [legendPosition]="legendPosition"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [tooltipDisabled]="tooltipDisabled"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [showGridLines]="showGridLines"
+        [roundDomains]="roundDomains"
+        [roundEdges]="roundEdges"
+        [animations]="animations"
+        (legendLabelClick)="onLegendLabelClick($event)"
+        (select)="select($event)"
+        (activate)="activate($event)"
+        (deactivate)="deactivate($event)"
+      >
+      </ngx-charts-box-chart>
       <div *ngIf="chartType === 'status-demo'">
         <ngx-slider
           [(ngModel)]="salePrice"
@@ -1110,7 +1140,8 @@
       </select>
 
       <h3>Theme</h3>
-      <select [ngModel]="theme" (ngModelChange)="theme = $event">
+      <select [ngModel]="theme" (ngModelChange)="changeTheme($event)">
+        >
         <option [value]="'dark'">Dark</option>
         <option [value]="'light'">Light</option>
       </select>
@@ -1125,6 +1156,7 @@
         <pre *ngIf="chart.inputFormat === 'multiSeriesNegative' && !linearScale">{{ fiscalYearReport | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'multiSeries' && linearScale && !range">{{ dateData | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'multiSeries' && linearScale && range">{{ dateDataWithRange | json }}</pre>
+        <pre *ngIf="chart.inputFormat === 'boxMultiSeries'">{{ boxData | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'bubble'">{{ bubble | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'bubbleInteractive'">{{ bubbleDemoTempData | json }}</pre>
         <pre *ngIf="chart.inputFormat === 'comboChart'">{{ barChart | json }}</pre>
@@ -1268,6 +1300,14 @@
             Hide bar if value is 0
           </label>
           <br />
+        </div>
+        <div *ngIf="chart.options.includes('strokeColor')">
+          <label>Stroke Color:</label><br />
+          <input type="text" [(ngModel)]="strokeColor" /><br />
+        </div>
+        <div *ngIf="chart.options.includes('strokeWidth')">
+          <label>Stroke Width:</label><br />
+          <input type="number" [(ngModel)]="strokeWidth" max="10" min="0" step="1" /><br />
         </div>
         <div *ngIf="chart.options.includes('showLegend')">
           <label>

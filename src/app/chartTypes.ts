@@ -556,6 +556,41 @@ const chartGroups = [
         }
       },
       {
+        name: 'Box Chart',
+        selector: 'box-plot',
+        inputFormat: 'boxMultiSeries',
+        options: [
+          'animations',
+          'colorScheme',
+          'schemeType',
+          'showXAxis',
+          'showYAxis',
+          'showLegend',
+          'legendTitle',
+          'legendPosition',
+          'showXAxisLabel',
+          'xAxisLabel',
+          'showYAxisLabel',
+          'yAxisLabel',
+          'showGridLines',
+          'roundDomains',
+          'roundEdges',
+          'strokeColor',
+          'strokeWidth',
+          'tooltipDisabled'
+        ],
+        defaults: {
+          xAxisLabel: 'Latin American Countries',
+          yAxisLabel: ' Average Wage [USD]'
+        }
+      },
+      {
+        name: 'Force Directed Graph (deprecated)',
+        selector: 'force-directed-graph',
+        inputFormat: 'graph',
+        options: ['animations', 'colorScheme', 'showLegend', 'legendTitle', 'legendPosition', 'tooltipDisabled']
+      },
+      {
         name: 'Heat Map',
         selector: 'heat-map',
         inputFormat: 'multiSeries',

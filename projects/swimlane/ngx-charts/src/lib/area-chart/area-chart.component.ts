@@ -10,13 +10,13 @@ import {
   TemplateRef
 } from '@angular/core';
 import { scaleLinear, scalePoint, scaleTime } from 'd3-scale';
-import { curveLinear, CurveFactory } from 'd3-shape';
+import { CurveFactory, curveLinear } from 'd3-shape';
 
 import { calculateViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { id } from '../utils/id';
-import { getUniqueXDomainValues, getScaleType } from '../common/domain.helper';
+import { getScaleType, getUniqueXDomainValues } from '../common/domain.helper';
 import { ViewDimensions, LegendPosition, LegendOptions, ScaleType } from '../common/types';
 import { isDate, isNumber } from '../utils/types';
 import { Series, StringOrNumberOrDate } from '../models/chart-data.model';
@@ -365,9 +365,9 @@ export class AreaChartComponent extends BaseChartComponent {
     return this.roundDomains ? scale.nice() : scale;
   }
 
-  getYScale(domain, height: number): number {
+  getYScale(domain: [number, number], height: number): number[] {
     const scale = scaleLinear().range([height, 0]).domain(domain);
-    return this.roundDomains ? scale.nice() : scale;
+    return this.roundDomains ? scale.nice().domain() : scale.domain();
   }
 
   getScaleType(values): ScaleType {

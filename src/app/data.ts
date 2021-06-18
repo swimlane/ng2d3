@@ -3,6 +3,7 @@ import {
   SingleSeries,
   MultiSeries,
   BubbleChartMultiSeries,
+  BoxChartMultiSeries,
   Series,
   TreeMapData
 } from '@swimlane/ngx-charts/models/chart-data.model';
@@ -304,6 +305,96 @@ export const bubble: BubbleChartMultiSeries = [
         x: '1990',
         y: 75.7,
         r: 57.1
+      }
+    ]
+  }
+];
+
+export const boxData: BoxChartMultiSeries = [
+  {
+    name: 'Colombia',
+    series: [
+      {
+        name: '2019',
+        value: 12
+      },
+      {
+        name: '2020',
+        value: 23
+      },
+      {
+        name: '2021',
+        value: 34
+      },
+      {
+        name: '2022',
+        value: 27
+      },
+      {
+        name: '2023',
+        value: 18
+      },
+      {
+        name: '2024',
+        value: 45
+      }
+    ]
+  },
+  {
+    name: 'Chile',
+    series: [
+      {
+        name: '2019',
+        value: 20
+      },
+      {
+        name: '2020',
+        value: 28
+      },
+      {
+        name: '2021',
+        value: 42
+      },
+      {
+        name: '2022',
+        value: 39
+      },
+      {
+        name: '2023',
+        value: 31
+      },
+      {
+        name: '2024',
+        value: 61
+      }
+    ]
+  },
+  {
+    name: 'Perú',
+    series: [
+      {
+        name: '2019',
+        value: 47
+      },
+      {
+        name: '2020',
+        value: 62
+      },
+      {
+        name: '2021',
+        value: 55
+      },
+      {
+        name: '2022',
+        value: 42
+      },
+      {
+        name: '2023',
+        value: 49
+      },
+      {
+        name: '2024',
+        value: 71
       }
     ]
   }

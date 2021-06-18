@@ -4,3 +4,8 @@ export enum Orientation {
   Left = 'left',
   Right = 'right'
 }
+
+export enum BarOrientation {
+  Vertical = 'vertical',
+  Horizontal = 'horizontal'
+}

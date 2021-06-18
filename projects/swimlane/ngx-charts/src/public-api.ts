@@ -27,6 +27,11 @@ export * from './lib/bar-chart/types/bar.model';
 export * from './lib/bar-chart/types/bar-chart-type.enum';
 export * from './lib/bar-chart/types/d0-type.enum';
 
+export * from './lib/box-chart/box-chart.module';
+export * from './lib/box-chart/box.component';
+export * from './lib/box-chart/box-chart.component';
+export * from './lib/box-chart/box-series.component';
+
 export * from './lib/bubble-chart/bubble-chart.module';
 export * from './lib/bubble-chart/bubble-chart.component';
 export * from './lib/bubble-chart/bubble-chart.utils';

@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   Output,
-  SimpleChanges,
   EventEmitter,
   ElementRef,
   OnChanges,
