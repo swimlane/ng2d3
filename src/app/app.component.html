@@ -306,6 +306,8 @@
         [labels]="showLabels"
         [doughnut]="doughnut"
         [arcWidth]="arcWidth"
+        [sliceBorderWidth]="sliceBorderWidth"
+        [sliceBorderColor]="sliceBorderColor"
         (legendLabelClick)="onLegendLabelClick($event)"
         [gradient]="gradient"
         [tooltipDisabled]="tooltipDisabled"
@@ -328,6 +330,8 @@
         [gradient]="gradient"
         [tooltipDisabled]="tooltipDisabled"
         [tooltipText]="pieTooltipText"
+        [sliceBorderWidth]="sliceBorderWidth"
+        [sliceBorderColor]="sliceBorderColor"
         (select)="select($event)"
         (activate)="activate($event)"
         (deactivate)="deactivate($event)"
@@ -1312,6 +1316,20 @@
           <label>
             <input type="checkbox" [checked]="showText" (change)="showText = $event.target.checked" />
             Show Text
+          </label>
+          <br />
+        </div>
+        <div *ngIf="chart.options.includes('sliceBorders')">
+          <label>
+            <label>Slices Border Color:</label><br />
+            <input type="text" [(ngModel)]="sliceBorderColor" />
+          </label>
+          <br />
+        </div>
+        <div *ngIf="chart.options.includes('sliceBorders')">
+          <label>
+            <label>Slices Border Width:</label><br />
+            <input type="number" [(ngModel)]="sliceBorderWidth" />
           </label>
           <br />
         </div>

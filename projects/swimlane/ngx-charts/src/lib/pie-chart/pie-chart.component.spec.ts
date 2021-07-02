@@ -53,7 +53,9 @@ describe('<ngx-charts-pie>', () => {
               [results]="single"
               [view]="[400,800]"
               [scheme]="colorScheme"
-              [doughnut]="false">
+              [doughnut]="false"
+              [sliceBorderColor]="'white'"
+              [sliceBorderWidth]="4">
             </ngx-charts-pie-chart>`
         }
       }).compileComponents();
@@ -80,6 +82,11 @@ describe('<ngx-charts-pie>', () => {
       const testArc: any = arc().innerRadius(0).outerRadius(180).startAngle(0).endAngle(1.0984497063524654);
 
       expect(arcElement.getAttribute('d')).toEqual(testArc());
+    });
+    it('should render white border to arc', () => {
+      const arcElement = fixture.debugElement.nativeElement.querySelector('path.arc');
+      expect(arcElement.getAttribute('stroke')).toEqual('white');
+      expect(arcElement.getAttribute('stroke-width')).toEqual('4');
     });
   });
 

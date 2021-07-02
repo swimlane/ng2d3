@@ -40,6 +40,8 @@ import { DataItem } from '../models/chart-data.model';
         (mouseenter)="activate.emit(data)"
         (mouseleave)="deactivate.emit(data)"
         [style.pointer-events]="getPointerEvents()"
+        [attr.stroke]="sliceBorderColor"
+        [attr.stroke-width]="sliceBorderWidth"
       />
     </svg:g>
   `,
@@ -60,6 +62,8 @@ export class PieArcComponent implements OnChanges {
   @Input() animate: boolean = true;
   @Input() pointerEvents: boolean = true;
   @Input() isActive: boolean = false;
+  @Input() sliceBorderColor: string;
+  @Input() sliceBorderWidth: number;
 
   @Output() select = new EventEmitter();
   @Output() activate = new EventEmitter();
