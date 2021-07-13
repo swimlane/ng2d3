@@ -420,6 +420,9 @@ const chartGroups = [
           'curve',
           'roundDomains',
           'tooltipDisabled',
+          'showRefLines',
+          'referenceLines',
+          'showRefLabels',
           'xScaleMin',
           'xScaleMax',
           'yScaleMin',
@@ -433,7 +436,8 @@ const chartGroups = [
         defaults: {
           yAxisLabel: 'GDP Per Capita',
           xAxisLabel: 'Census Date',
-          linearScale: true
+          linearScale: true,
+          showRefLines: false
         }
       },
       {
@@ -773,45 +777,6 @@ const chartGroups = [
         selector: 'sparkline',
         inputFormat: 'multiSeries',
         options: ['animations', 'curve']
-      },
-      {
-        name: 'Line Chart with Reference Lines',
-        selector: 'line-reference-lines',
-        inputFormat: 'multiSeries',
-        options: [
-          'animations',
-          'colorScheme',
-          'schemeType',
-          'showXAxis',
-          'showYAxis',
-          'gradient',
-          'showLegend',
-          'legendTitle',
-          'legendPosition',
-          'showXAxisLabel',
-          'xAxisLabel',
-          'showYAxisLabel',
-          'yAxisLabel',
-          'autoScale',
-          'timeline',
-          'showGridLines',
-          'curve',
-          'rangeFillOpacity',
-          'roundDomains',
-          'tooltipDisabled',
-          'showRefLines',
-          'referenceLines',
-          'showRefLabels',
-          'trimXAxisTicks',
-          'trimYAxisTicks',
-          'maxXAxisTickLength',
-          'maxYAxisTickLength'
-        ],
-        defaults: {
-          yAxisLabel: 'GDP Per Capita',
-          xAxisLabel: 'Year',
-          linearScale: false
-        }
       },
       {
         name: 'Timeline Filter Bar Chart',

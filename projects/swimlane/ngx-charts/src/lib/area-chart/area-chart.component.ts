@@ -18,9 +18,9 @@ import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { id } from '../utils/id';
 import { getUniqueXDomainValues, getScaleType } from '../common/domain.helper';
-import { ViewDimensions, LegendPosition, LegendOptions, ScaleType } from '../common/types';
+import { ViewDimensions, LegendPosition, LegendOptions, ScaleType, ReferenceLine } from '../common/types';
 import { isDate, isNumber } from '../utils/types';
-import { Series, StringOrNumberOrDate } from '../models/chart-data.model';
+import { Series } from '../models/chart-data.model';
 
 @Component({
   selector: 'ngx-charts-area-chart',
@@ -72,6 +72,9 @@ import { Series, StringOrNumberOrDate } from '../models/chart-data.model';
           [maxTickLength]="maxYAxisTickLength"
           [tickFormatting]="yAxisTickFormatting"
           [ticks]="yAxisTicks"
+          [referenceLines]="referenceLines"
+          [showRefLines]="showRefLines"
+          [showRefLabels]="showRefLabels"
           (dimensionsChanged)="updateYAxisWidth($event)"
         ></svg:g>
         <svg:g [attr.clip-path]="clipPath">
@@ -192,6 +195,9 @@ export class AreaChartComponent extends BaseChartComponent {
   @Input() xScaleMax: any;
   @Input() yScaleMin: number;
   @Input() yScaleMax: number;
+  @Input() referenceLines: ReferenceLine[];
+  @Input() showRefLines: boolean;
+  @Input() showRefLabels: boolean;
 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();

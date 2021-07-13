@@ -61,9 +61,6 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
 
   verticalSpacing: number = 20;
   rotateLabels: boolean = false;
-  innerTickSize: number = 6;
-  outerTickSize: number = 6;
-  tickPadding: number = 3;
   textAnchor: TextAnchor = TextAnchor.Middle;
   maxTicksLength: number = 0;
   maxAllowedLength: number = 16;

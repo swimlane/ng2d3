@@ -14,10 +14,9 @@ import {
 } from '@angular/core';
 import { trimLabel } from '../trim-label.helper';
 import { reduceTicks } from './ticks.helper';
-import { roundedRect } from '../../common/shape.helper';
+import { roundedRect } from '../shape.helper';
 import { isPlatformBrowser } from '@angular/common';
-import { Orientation } from '../types/orientation.enum';
-import { TextAnchor } from '../types/text-anchor.enum';
+import { Orientation, TextAnchor, ReferenceLine } from '../types';
 
 @Component({
   selector: 'g[ngx-charts-y-axis-ticks]',
@@ -98,7 +97,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
   @Input() showGridLines: boolean = false;
   @Input() gridLineWidth: number;
   @Input() height: number;
-  @Input() referenceLines;
+  @Input() referenceLines: ReferenceLine[];
   @Input() showRefLabels: boolean = false;
   @Input() showRefLines: boolean = false;
 
@@ -119,7 +118,6 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
   tickFormat: (o: any) => string;
   ticks: any[];
   width: number = 0;
-  outerTickSize: number = 6;
   rotateLabels: boolean = false;
   refMax: number;
   refMin: number;
@@ -184,7 +182,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
       : scale;
 
     if (this.showRefLines && this.referenceLines) {
-      this.setReferencelines();
+      this.setReferenceLines();
     }
 
     switch (this.orient) {
@@ -229,7 +227,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
     setTimeout(() => this.updateDims());
   }
 
-  setReferencelines(): void {
+  setReferenceLines(): void {
     this.refMin = this.adjustedScale(
       Math.min.apply(
         null,

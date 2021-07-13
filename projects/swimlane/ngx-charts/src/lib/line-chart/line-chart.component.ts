@@ -18,7 +18,7 @@ import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { id } from '../utils/id';
 import { getUniqueXDomainValues, getScaleType } from '../common/domain.helper';
-import { LegendOptions, LegendPosition, ScaleType, ViewDimensions } from '../common/types';
+import { LegendOptions, LegendPosition, ReferenceLine, ScaleType, ViewDimensions } from '../common/types';
 
 @Component({
   selector: 'ngx-charts-line-chart',
@@ -204,7 +204,7 @@ export class LineChartComponent extends BaseChartComponent {
   @Input() roundDomains: boolean = false;
   @Input() tooltipDisabled: boolean = false;
   @Input() showRefLines: boolean = false;
-  @Input() referenceLines: any;
+  @Input() referenceLines: ReferenceLine[];
   @Input() showRefLabels: boolean = true;
   @Input() xScaleMin: number;
   @Input() xScaleMax: number;
