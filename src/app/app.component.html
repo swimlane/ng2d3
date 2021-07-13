@@ -374,6 +374,7 @@
         (select)="select($event)"
         (activate)="activate($event)"
         (deactivate)="deactivate($event)"
+        (timelineSelectionChanged)="onTimelineSelectionChange($event)"
       >
       </ngx-charts-line-chart>
       <ngx-charts-polar-chart
@@ -481,6 +482,7 @@
         (select)="select($event)"
         (activate)="activate($event)"
         (deactivate)="deactivate($event)"
+        (timelineSelectionChanged)="onTimelineSelectionChange($event)"
       >
       </ngx-charts-area-chart>
       <ngx-charts-area-chart-stacked
@@ -518,6 +520,7 @@
         (select)="select($event)"
         (activate)="activate($event)"
         (deactivate)="deactivate($event)"
+        (timelineSelectionChanged)="onTimelineSelectionChange($event)"
       >
       </ngx-charts-area-chart-stacked>
       <ngx-charts-area-chart-normalized
@@ -551,6 +554,7 @@
         (select)="select($event)"
         (activate)="activate($event)"
         (deactivate)="deactivate($event)"
+        (timelineSelectionChanged)="onTimelineSelectionChange($event)"
       >
       </ngx-charts-area-chart-normalized>
       <combo-chart-component
