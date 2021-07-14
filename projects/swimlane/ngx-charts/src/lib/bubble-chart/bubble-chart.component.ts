@@ -19,7 +19,7 @@ import { getScaleType } from '../common/domain.helper';
 import { getDomain, getScale } from './bubble-chart.utils';
 import { id } from '../utils/id';
 import { LegendOptions, LegendPosition, ScaleType, ViewDimensions } from '../common/types';
-import { BubbleChartSeries } from '../models/chart-data.model';
+import { BubbleChartMultiSeries } from '../models/chart-data.model';
 
 @Component({
   selector: 'ngx-charts-bubble-chart',
@@ -167,7 +167,7 @@ export class BubbleChartComponent extends BaseChartComponent {
   scaleType: ScaleType = ScaleType.Linear;
   margin: number[] = [10, 20, 10, 20];
   bubblePadding: number[] = [0, 0, 0, 0];
-  data: BubbleChartSeries[];
+  data: BubbleChartMultiSeries;
 
   legendOptions: LegendOptions;
   transform: string;

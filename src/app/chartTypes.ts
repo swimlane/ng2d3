@@ -1,4 +1,17 @@
-const chartGroups = [
+export interface ChartGroup {
+  name: string;
+  charts: ChartConfig[];
+}
+
+export interface ChartConfig {
+  name: string;
+  selector: string;
+  inputFormat: string;
+  options: string[];
+  defaults?: { [key: string]: string | boolean | number };
+}
+
+const chartGroups: ChartGroup[] = [
   {
     name: 'Bar Charts',
     charts: [

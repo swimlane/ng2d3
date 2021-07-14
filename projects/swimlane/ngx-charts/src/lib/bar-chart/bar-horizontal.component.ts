@@ -14,6 +14,7 @@ import { calculateViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { ViewDimensions, LegendPosition, ScaleType, LegendOptions } from '../common/types';
+import { SingleSeries } from '../models/chart-data.model';
 
 @Component({
   selector: 'ngx-charts-bar-horizontal',
@@ -87,6 +88,7 @@ import { ViewDimensions, LegendPosition, ScaleType, LegendOptions } from '../com
   encapsulation: ViewEncapsulation.None
 })
 export class BarHorizontalComponent extends BaseChartComponent {
+  @Input() results: SingleSeries;
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
   @Input() legendPosition: LegendPosition = LegendPosition.Right;

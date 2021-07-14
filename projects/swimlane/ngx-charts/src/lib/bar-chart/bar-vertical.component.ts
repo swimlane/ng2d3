@@ -13,7 +13,7 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { calculateViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
-import { DataItem } from '../models/chart-data.model';
+import { DataItem, SingleSeries } from '../models/chart-data.model';
 import { ViewDimensions, LegendPosition, LegendOptions, ScaleType } from '../common/types';
 
 @Component({
@@ -88,6 +88,7 @@ import { ViewDimensions, LegendPosition, LegendOptions, ScaleType } from '../com
   encapsulation: ViewEncapsulation.None
 })
 export class BarVerticalComponent extends BaseChartComponent {
+  @Input() results: SingleSeries;
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
   @Input() legendPosition: LegendPosition = LegendPosition.Right;

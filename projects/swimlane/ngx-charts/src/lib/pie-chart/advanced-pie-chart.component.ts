@@ -12,7 +12,7 @@ import {
 import { calculateViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
-import { DataItem } from '../models/chart-data.model';
+import { DataItem, SingleSeries } from '../models/chart-data.model';
 import { ScaleType, ViewDimensions } from '../common/types';
 
 @Component({
@@ -64,6 +64,7 @@ import { ScaleType, ViewDimensions } from '../common/types';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdvancedPieChartComponent extends BaseChartComponent {
+  @Input() results: SingleSeries;
   @Input() gradient: boolean;
   @Input() activeEntries: any[] = [];
   @Input() tooltipDisabled: boolean = false;

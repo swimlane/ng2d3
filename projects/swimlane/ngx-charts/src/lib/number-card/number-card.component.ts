@@ -5,6 +5,7 @@ import { ColorHelper } from '../common/color.helper';
 import { gridLayout, gridSize } from '../common/grid-layout.helper';
 import { ScaleType, ViewDimensions } from '../common/types';
 import { CardModel } from './card-series.component';
+import { SingleSeries } from '../models/chart-data.model';
 
 @Component({
   selector: 'ngx-charts-number-card',
@@ -34,6 +35,7 @@ import { CardModel } from './card-series.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NumberCardComponent extends BaseChartComponent {
+  @Input() results: SingleSeries;
   @Input() cardColor: string;
   @Input() bandColor: string;
   @Input() emptyColor: string = 'rgba(0, 0, 0, 0)';
@@ -70,15 +72,7 @@ export class NumberCardComponent extends BaseChartComponent {
     this.setColors();
     this.transform = `translate(${this.dims.xOffset} , ${this.margin[0]})`;
 
-    const size = gridSize(this.dims, this.results.length, 150);
-    const N = size[0] * size[1];
-
     const data = this.results.slice();
-
-    while (data.length < N) {
-      data.push({ value: null });
-    }
-
     this.data = gridLayout(this.dims, data, 150, this.designatedTotal) as any;
   }
 

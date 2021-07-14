@@ -15,20 +15,14 @@ import { calculateViewDimensions } from '../common/view-dimensions.helper';
 import { ColorHelper } from '../common/color.helper';
 import { BaseChartComponent } from '../common/base-chart.component';
 import { trimLabel } from '../common/trim-label.helper';
-import { gridLayout } from '../common/grid-layout.helper';
+import { GridItem, gridLayout } from '../common/grid-layout.helper';
 import { formatLabel } from '../common/label.helper';
-import { DataItem, PieGridDataItem } from '../models/chart-data.model';
+import { DataItem, PieGridDataItem, SingleSeries } from '../models/chart-data.model';
 import { ScaleType, ViewDimensions } from '../common/types';
 import { PlacementTypes } from '../common/tooltip/position';
 import { StyleTypes } from '../common/tooltip/style.type';
 
-export interface PieGridData {
-  data: PieGridDataItem;
-  height: number;
-  width: number;
-  x: number;
-  y: number;
-}
+export type PieGridItem = GridItem<PieGridDataItem>;
 
 @Component({
   selector: 'ngx-charts-pie-grid',
@@ -101,6 +95,7 @@ export interface PieGridData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PieGridComponent extends BaseChartComponent {
+  @Input() results: SingleSeries;
   @Input() designatedTotal: number;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipText: (o: any) => any;
@@ -112,7 +107,7 @@ export class PieGridComponent extends BaseChartComponent {
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
 
   dims: ViewDimensions;
-  data: PieGridData[];
+  data: PieGridItem[];
   transform: string;
   series: any[];
   domain: string[];

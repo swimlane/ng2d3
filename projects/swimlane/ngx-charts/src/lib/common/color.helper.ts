@@ -5,14 +5,26 @@ import { Color, colorSets } from '../utils/color-sets';
 import { Gradient, ScaleType } from './types';
 import { StringOrNumberOrDate } from '../models/chart-data.model';
 
+export type CustomColorFn = (value: StringOrNumberOrDate) => string;
+
+export interface CustomColor {
+  name: StringOrNumberOrDate;
+  value: string;
+}
+
 export class ColorHelper {
   scale: any;
   scaleType: ScaleType;
   colorDomain: string[];
   domain: number[] | string[];
-  customColors: any;
+  customColors: CustomColor[] | CustomColorFn;
 
-  constructor(scheme: string | Color, type: ScaleType, domain: number[] | string[], customColors?) {
+  constructor(
+    scheme: string | Color,
+    type: ScaleType,
+    domain: number[] | string[],
+    customColors?: CustomColor[] | CustomColorFn
+  ) {
     if (typeof scheme === 'string') {
       scheme = colorSets.find(cs => {
         return cs.name === scheme;
@@ -66,10 +78,10 @@ export class ColorHelper {
       }
 
       const formattedValue = value.toString();
-      let found: any; // todo type customColors
+      let found: CustomColor;
       if (this.customColors && this.customColors.length > 0) {
         found = this.customColors.find(mapping => {
-          return mapping.name.toLowerCase() === formattedValue.toLowerCase();
+          return `${mapping.name}`.toLowerCase() === formattedValue.toLowerCase();
         });
       }
 

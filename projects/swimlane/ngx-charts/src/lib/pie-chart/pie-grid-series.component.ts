@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { pie } from 'd3-shape';
 import { PieGridDataItem } from '../models/chart-data.model';
-import { PieGridData } from './pie-grid.component';
+import { PieGridItem } from './pie-grid.component';
 
 export interface PieArc {
   animate: boolean;
@@ -50,7 +50,7 @@ export interface PieArc {
 })
 export class PieGridSeriesComponent implements OnChanges {
   @Input() colors;
-  @Input() data: PieGridData[];
+  @Input() data: PieGridItem[];
   @Input() innerRadius = 70;
   @Input() outerRadius = 80;
   @Input() animations: boolean = true;

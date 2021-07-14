@@ -18,11 +18,19 @@ import {
 import { bubbleDemoData } from './custom-charts/bubble-chart-interactive/data';
 import { BubbleChartInteractiveServerDataModel } from './custom-charts/bubble-chart-interactive/models';
 import { data as countries } from 'emoji-flags';
-import chartGroups from './chartTypes';
+import chartGroups, { ChartConfig, ChartGroup } from './chartTypes';
 import { barChart, lineChartSeries } from './combo-chart-data';
 import pkg from '../../projects/swimlane/ngx-charts/package.json';
 import { LegendPosition, ScaleType } from '@swimlane/ngx-charts/common/types';
 import { InputTypes } from '@swimlane/ngx-ui';
+import {
+  BubbleChartMultiSeries,
+  DataItem,
+  MultiSeries,
+  Series,
+  SingleSeries
+} from '@swimlane/ngx-charts/models/chart-data.model';
+import { CustomColor } from '@swimlane/ngx-charts/common/color.helper';
 
 const monthName = new Intl.DateTimeFormat('en-us', { month: 'short' });
 const weekdayName = new Intl.DateTimeFormat('en-us', { weekday: 'short' });
@@ -51,21 +59,21 @@ export class AppComponent implements OnInit {
 
   theme = 'dark';
   chartType: string;
-  chartGroups: any[];
-  chart: any;
+  chartGroups: ChartGroup[];
+  chart: ChartConfig;
   realTimeData: boolean = false;
-  countries: any[];
-  single: any[];
-  multi: any[];
-  fiscalYearReport: any[];
-  dateData: any[];
-  dateDataWithRange: any[];
-  calendarData: any[];
-  statusData: any[];
-  sparklineData: any[];
-  timelineFilterBarData: any[];
+  countries: Array<{ name: string; emoji: string }>;
+  single: SingleSeries;
+  multi: MultiSeries;
+  fiscalYearReport: MultiSeries;
+  dateData: MultiSeries;
+  dateDataWithRange: MultiSeries;
+  calendarData: MultiSeries;
+  statusData: DataItem[];
+  sparklineData: MultiSeries;
+  timelineFilterBarData: SingleSeries;
   graph: { links: any[]; nodes: any[] };
-  bubble: any;
+  bubble: BubbleChartMultiSeries;
   linearScale: boolean = false;
   range: boolean = false;
 
@@ -156,7 +164,7 @@ export class AppComponent implements OnInit {
   rangeFillOpacity: number = 0.15;
 
   // Override colors for certain values
-  customColors: any[] = [
+  customColors: CustomColor[] = [
     {
       name: 'Germany',
       value: '#a8385d'
@@ -488,7 +496,7 @@ export class AppComponent implements OnInit {
     console.log('Legend clicked', entry);
   }
 
-  getCalendarData(): any[] {
+  getCalendarData(): MultiSeries {
     // today
     const now = new Date();
     const todaysDay = now.getDate();
@@ -501,14 +509,14 @@ export class AppComponent implements OnInit {
     const thisMondayMonth = thisMonday.getMonth();
 
     // 52 weeks before monday
-    const calendarData = [];
+    const calendarData: Series[] = [];
     const getDate = d => new Date(thisMondayYear, thisMondayMonth, d);
     for (let week = -52; week <= 0; week++) {
       const mondayDay = thisMondayDay + week * 7;
       const monday = getDate(mondayDay);
 
       // one week
-      const series = [];
+      const series: DataItem[] = [];
       for (let dayOfWeek = 7; dayOfWeek > 0; dayOfWeek--) {
         const date = getDate(mondayDay - 1 + dayOfWeek);
 
@@ -521,9 +529,11 @@ export class AppComponent implements OnInit {
         const value = dayOfWeek < 6 ? date.getMonth() + 1 : 0;
 
         series.push({
-          date,
           name: weekdayName.format(date),
-          value
+          value,
+          extra: {
+            date
+          }
         });
       }
 
@@ -548,7 +558,7 @@ export class AppComponent implements OnInit {
 
   calendarTooltipText(c): string {
     return `
-      <span class="tooltip-label">${c.label} • ${c.cell.date.toLocaleDateString()}</span>
+      <span class="tooltip-label">${c.label} • ${c.cell.extra.date.toLocaleDateString()}</span>
       <span class="tooltip-val">${c.data.toLocaleString()}</span>
     `;
   }
@@ -567,13 +577,13 @@ export class AppComponent implements OnInit {
     return `\$${c.value.toLocaleString()}`;
   }
 
-  getStatusData() {
+  getStatusData(): DataItem[] {
     const sales = Math.round(1e4 * Math.random());
     const dur = 36e5 * Math.random();
     return this.calcStatusData(sales, dur);
   }
 
-  calcStatusData(sales = this.statusData[0].value, dur = this.statusData[2].value) {
+  calcStatusData(sales = this.statusData[0].value, dur = this.statusData[2].value): DataItem[] {
     const ret = sales * this.salePrice;
     const cost = ((sales * dur) / 60 / 60 / 1000) * this.personnelCost;
     const ROI = (ret - cost) / cost;

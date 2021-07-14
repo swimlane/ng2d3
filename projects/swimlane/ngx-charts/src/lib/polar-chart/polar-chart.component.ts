@@ -18,6 +18,7 @@ import { BaseChartComponent } from '../common/base-chart.component';
 import { getScaleType } from '../common/domain.helper';
 import { isDate } from '../utils/types';
 import { ViewDimensions, LegendPosition, ScaleType, Orientation } from '../common/types';
+import { MultiSeries } from '../models/chart-data.model';
 
 const twoPI = 2 * Math.PI;
 
@@ -134,6 +135,7 @@ const twoPI = 2 * Math.PI;
   ]
 })
 export class PolarChartComponent extends BaseChartComponent {
+  @Input() results: MultiSeries;
   @Input() legend: boolean;
   @Input() legendTitle: string = 'Legend';
   @Input() legendPosition: LegendPosition = LegendPosition.Right;
