@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnDestroy, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { count, decimalChecker } from './count.helper';
 
 /**
@@ -14,7 +14,7 @@ import { count, decimalChecker } from './count.helper';
   selector: '[ngx-charts-count-up]',
   template: ` {{ value }} `
 })
-export class CountUpDirective implements OnDestroy {
+export class CountUpDirective implements OnChanges, OnDestroy {
   @Input() countDuration: number = 1;
   @Input() countPrefix: string = '';
   @Input() countSuffix: string = '';
@@ -64,8 +64,16 @@ export class CountUpDirective implements OnDestroy {
   private _countTo: number = 0;
   private _countFrom: number = 0;
 
+  private valueFormattingUsed = this.defaultValueFormatting;
+
   constructor(private cd: ChangeDetectorRef, element: ElementRef) {
     this.nativeElement = element.nativeElement;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.valueFormatting) {
+      this.valueFormattingUsed = this.valueFormatting || this.defaultValueFormatting;
+    }
   }
 
   ngOnDestroy(): void {
@@ -75,16 +83,17 @@ export class CountUpDirective implements OnDestroy {
   start(): void {
     cancelAnimationFrame(this.animationReq);
 
-    const valueFormatting =
-      this.valueFormatting || (value => `${this.countPrefix}${value.toLocaleString()}${this.countSuffix}`);
-
     const callback = ({ value, progress, finished }) => {
-      this.value = valueFormatting(value);
+      this.value = this.valueFormattingUsed(value);
       this.cd.markForCheck();
       if (!finished) this.countChange.emit({ value: this.value, progress });
       if (finished) this.countFinish.emit({ value: this.value, progress });
     };
 
     this.animationReq = count(this.countFrom, this.countTo, this.countDecimals, this.countDuration, callback);
+  }
+
+  private defaultValueFormatting(value) {
+    return `${this.countPrefix}${value.toLocaleString()}${this.countSuffix}`;
   }
 }
