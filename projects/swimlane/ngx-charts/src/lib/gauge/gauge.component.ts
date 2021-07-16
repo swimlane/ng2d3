@@ -215,6 +215,7 @@ export class GaugeComponent extends BaseChartComponent implements AfterViewInit 
 
       const valueArc = {
         endAngle: (Math.min(this.valueScale(d.value), this.angleSpan) * Math.PI) / 180,
+        startAngle: (Math.min(this.valueScale(d.extra?.startValue ?? this.min), this.angleSpan) * Math.PI) / 180,
         innerRadius,
         outerRadius,
         data: {

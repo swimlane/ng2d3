@@ -29,7 +29,7 @@ export interface ArcItem {
     ></svg:g>
     <svg:g
       ngx-charts-pie-arc
-      [startAngle]="0"
+      [startAngle]="valueArc.startAngle"
       [endAngle]="valueArc.endAngle"
       [innerRadius]="valueArc.innerRadius"
       [outerRadius]="valueArc.outerRadius"

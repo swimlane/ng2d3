@@ -50,6 +50,14 @@ The data format is single series:
   {
     "name": "USA",
     "value": 5000000
+  },
+  {
+    "name": "China",
+    "value": 4000000,
+    "extra": 
+    {
+      "startValue": 20000000 // this will create a range arc
+    }
   }
 ]
 ```
