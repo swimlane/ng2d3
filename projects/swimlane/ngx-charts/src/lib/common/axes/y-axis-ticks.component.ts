@@ -148,7 +148,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
       return;
     }
 
-    const width = parseInt(this.ticksElement.nativeElement.getBoundingClientRect().width, 10);
+    const width = Math.round(this.ticksElement.nativeElement.getBoundingClientRect().width);
     if (width !== this.width) {
       this.width = width;
       this.dimensionsChanged.emit({ width });

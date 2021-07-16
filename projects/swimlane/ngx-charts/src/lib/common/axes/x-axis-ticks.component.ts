@@ -93,7 +93,7 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
       return;
     }
 
-    const height = parseInt(this.ticksElement.nativeElement.getBoundingClientRect().height, 10);
+    const height = Math.round(this.ticksElement.nativeElement.getBoundingClientRect().height);
     if (height !== this.height) {
       this.height = height;
       this.dimensionsChanged.emit({ height: this.height });
