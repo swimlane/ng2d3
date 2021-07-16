@@ -223,7 +223,7 @@ export class BarVertical2DComponent extends BaseChartComponent {
   }
 
   getGroupScale(): any {
-    const spacing = this.groupDomain.length / (this.dims.height / this.groupPadding + 1);
+    const spacing = this.groupDomain.length / (this.dims.width / this.groupPadding + 1);
 
     return scaleBand()
       .rangeRound([0, this.dims.width])
