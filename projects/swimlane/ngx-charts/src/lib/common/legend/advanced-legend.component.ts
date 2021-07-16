@@ -56,7 +56,7 @@ export interface AdvancedLegendItem {
               *ngIf="animations"
               class="item-value"
               ngx-charts-count-up
-              [countTo]="legendItem._value"
+              [countTo]="valueFormatting ? valueFormatting(legendItem.value) : defaultValueFormatting(legendItem.value)"
               [valueFormatting]="valueFormatting"
             ></div>
             <div *ngIf="!animations" class="item-value">
