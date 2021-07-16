@@ -12,6 +12,7 @@
 | results             | object\[\]           |                | the chart data                                                                                                    |
 | scheme              | object               |                | the color scheme of the chart                                                                                     |
 | animations          | boolean              | true           | enable animations                                                                                                 |
+| customColors        | function or object   |                | custom colors for the chart. Used to override a color for a specific value                                        |
 | legend              | boolean              | false          | show or hide the legend                                                                                           |
 | legendTitle         | string               | 'Legend'       | the legend title                                                                                                  |
 | legendPosition      | string               | 'right'        | the legend position ['right', 'below']                                                                            |
