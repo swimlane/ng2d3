@@ -26,6 +26,7 @@ import { ViewDimensions } from '../types/view-dimension.interface';
         [tickFormatting]="tickFormatting"
         [tickArguments]="tickArguments"
         [tickStroke]="tickStroke"
+        [tickFilling]="tickFilling"
         [scale]="xScale"
         [orient]="xOrient"
         [showGridLines]="showGridLines"
@@ -61,6 +62,7 @@ export class XAxisComponent implements OnChanges {
   @Input() xAxisTickCount: number;
   @Input() xOrient: Orientation = Orientation.Bottom;
   @Input() xAxisOffset: number = 0;
+  @Input() tickFilling: (o: any) => string;
 
   @Output() dimensionsChanged = new EventEmitter();
 
