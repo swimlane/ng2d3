@@ -60,6 +60,7 @@ export class ComboChartComponent extends BaseChartComponent {
   @Input() rangeFillOpacity: number;
   @Input() animations: boolean = true;
   @Input() noBarWhenZero: boolean = true;
+  @Input() yScaleMax;
 
   @Output() activate: EventEmitter<any> = new EventEmitter();
   @Output() deactivate: EventEmitter<any> = new EventEmitter();
@@ -271,13 +272,13 @@ export class ComboChartComponent extends BaseChartComponent {
     }
 
     let min = Math.min(...domain);
-    const max = Math.max(...domain);
+    const max = this.yScaleMax ? this.yScaleMax : Math.max(...domain);
     if (this.yRightAxisScaleFactor) {
       const minMax = this.yRightAxisScaleFactor(min, max);
       return [Math.min(0, minMax.min), minMax.max];
     } else {
       min = Math.min(0, min);
-      return [min, max];
+      return [min, this.yScaleMax ? this.yScaleMax : max];
     }
   }
 
@@ -330,7 +331,7 @@ export class ComboChartComponent extends BaseChartComponent {
   getYDomain() {
     const values = this.results.map(d => d.value);
     const min = Math.min(0, ...values);
-    const max = Math.max(...values);
+    const max =this.yScaleMax? this.yScaleMax : Math.max(...values);
     if (this.yLeftAxisScaleFactor) {
       const minMax = this.yLeftAxisScaleFactor(min, max);
       return [Math.min(0, minMax.min), minMax.max];
