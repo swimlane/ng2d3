@@ -45,7 +45,7 @@ import { TextAnchor } from '../types/text-anchor.enum';
       [attr.transform]="gridLineTransform()"
     />
     <svg:g *ngFor="let tick of ticks" [attr.transform]="transform(tick)">
-      <svg:g *ngIf="showGridLines" [attr.transform]="gridLineTransform()">
+      <svg:g *ngIf="showGridLines || tick === 0" [attr.transform]="gridLineTransform()">
         <svg:line
           *ngIf="orient === Orientation.Left"
           class="gridline-path gridline-path-horizontal"
