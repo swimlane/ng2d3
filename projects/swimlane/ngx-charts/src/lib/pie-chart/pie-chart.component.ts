@@ -36,6 +36,7 @@ import { LegendOptions, LegendPosition, ScaleType, ViewDimensions } from '../com
           [labelFormatting]="labelFormatting"
           [trimLabels]="trimLabels"
           [maxLabelLength]="maxLabelLength"
+          [labelMinArc]="labelMinArc"
           [activeEntries]="activeEntries"
           [innerRadius]="innerRadius"
           [outerRadius]="outerRadius"
@@ -71,6 +72,7 @@ export class PieChartComponent extends BaseChartComponent {
   @Input() labelFormatting: any;
   @Input() trimLabels: boolean = true;
   @Input() maxLabelLength: number = 10;
+  @Input() labelMinArc = 6;
   @Input() tooltipText: any;
   @Output() dblclick = new EventEmitter();
   // optional margins

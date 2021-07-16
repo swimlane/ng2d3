@@ -17,6 +17,7 @@
 | labelFormatting | function    |               | function that formats the label text                                                                              |
 | trimLabels      | boolean     | true          | trim the labels beyond a certain maximum length                                                                   |
 | maxLabelLength  | number      | 10            | maximum length of the labels. If `trimLabels` is `true`, labels over this length will be trimmed                  |
+| labelMinArc     | number      | 6             | minimum arc length in degrees to display a label for each category                                                |
 | legend          | boolean     | true         | show or hide the legend                                                                                           |
 | legendTitle     | string      | 'Legend'      | the legend title                                                                                                  |
 | legendPosition  | string      | 'right'       | the legend position ['right', 'below']                                                                            |

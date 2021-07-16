@@ -80,6 +80,7 @@ export class PieSeriesComponent implements OnChanges {
   @Input() labelFormatting: any;
   @Input() trimLabels: boolean = true;
   @Input() maxLabelLength: number = 10;
+  @Input() labelMinArc = 6;
   @Input() tooltipText: (o: any) => any;
   @Input() tooltipDisabled: boolean = false;
   @Input() tooltipTemplate: TemplateRef<any>;
@@ -164,7 +165,7 @@ export class PieSeriesComponent implements OnChanges {
   }
 
   labelVisible(myArc): boolean {
-    return this.showLabels && myArc.endAngle - myArc.startAngle > Math.PI / 30;
+    return this.showLabels && myArc.endAngle - myArc.startAngle >= this.labelMinArc * Math.PI / 180;
   }
 
   getTooltipTitle(a) {
