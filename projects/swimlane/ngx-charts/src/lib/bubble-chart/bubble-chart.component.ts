@@ -56,6 +56,7 @@ import { BubbleChartSeries } from '../models/chart-data.model';
           [rotateTicks]="rotateXAxisTicks"
           [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
+          [tickMultiLine]="xAxisTickMultiLine"
           [ticks]="xAxisTicks"
           (dimensionsChanged)="updateXAxisHeight($event)"
         />
@@ -144,6 +145,7 @@ export class BubbleChartComponent extends BaseChartComponent {
   @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
+  @Input() xAxisTickMultiLine: boolean = false;
   @Input() xAxisTicks: any[];
   @Input() yAxisTicks: any[];
   @Input() roundDomains: boolean = false;

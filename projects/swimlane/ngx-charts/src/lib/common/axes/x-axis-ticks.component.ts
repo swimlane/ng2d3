@@ -13,7 +13,7 @@ import {
   Inject,
   PLATFORM_ID
 } from '@angular/core';
-import { trimLabel } from '../trim-label.helper';
+import { chunkLabel, trimLabel } from '../trim-label.helper';
 import { reduceTicks } from './ticks.helper';
 import { Orientation } from '../types/orientation.enum';
 import { TextAnchor } from '../types/text-anchor.enum';
@@ -30,7 +30,14 @@ import { TextAnchor } from '../types/text-anchor.enum';
           [attr.transform]="textTransform"
           [style.font-size]="'12px'"
         >
-          {{ tickTrim(tickFormat(tick)) }}
+          <ng-container *ngIf="!tickMultiLine; else tickMultiLineTemplate">
+            {{ tickTrim(tickFormat(tick)) }}
+          </ng-container>
+          <ng-template #tickMultiLineTemplate>
+            <ng-container *ngFor="let chunk of tickChunk(tickFormat(tick)); let i = index">
+              <svg:tspan x="0" [attr.dy]="i === 0 ? '0' : '1em'">{{ chunk }}</svg:tspan>
+            </ng-container>
+          </ng-template>
         </svg:text>
       </svg:g>
     </svg:g>
@@ -56,6 +63,7 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
   @Input() gridLineHeight: number;
   @Input() width: number;
   @Input() rotateTicks: boolean = true;
+  @Input() tickMultiLine: boolean = false;
 
   @Output() dimensionsChanged = new EventEmitter();
 
@@ -202,5 +210,9 @@ export class XAxisTicksComponent implements OnChanges, AfterViewInit {
 
   tickTrim(label: string): string {
     return this.trimTicks ? trimLabel(label, this.maxTickLength) : label;
+  }
+
+  tickChunk(label: string): string[] {
+    return chunkLabel(label, this.maxTickLength);
   }
 }

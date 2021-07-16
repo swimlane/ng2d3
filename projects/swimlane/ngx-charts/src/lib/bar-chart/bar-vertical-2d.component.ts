@@ -52,6 +52,7 @@ import { ViewDimensions, LegendPosition, ScaleType, LegendOptions, BarOrientatio
           [rotateTicks]="rotateXAxisTicks"
           [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
+          [tickMultiLine]="xAxisTickMultiLine"
           [ticks]="xAxisTicks"
           [xAxisOffset]="dataLabelMaxHeight.negative"
           (dimensionsChanged)="updateXAxisHeight($event)"
@@ -136,6 +137,7 @@ export class BarVertical2DComponent extends BaseChartComponent {
   @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
+  @Input() xAxisTickMultiLine: boolean = false;
   @Input() xAxisTicks: any[];
   @Input() yAxisTicks: any[];
   @Input() groupPadding: number = 16;

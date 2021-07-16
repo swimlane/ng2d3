@@ -26,6 +26,7 @@
 | rotateXAxisTicks    | boolean            | true          | enable automic rotation of x-axis ticks to prevent overlaps                                                     |
 | xAxisTickFormatting | function           |               | the x axis tick formatting                                                                                      |
 | yAxisTickFormatting | function           |               | the y axis tick formatting                                                                                      |
+| xAxisTickMultiLine  | boolean            | false         | display ticks in multiple lines. The max characters by line will be the `maxXAxisTickLength` value              |
 | xAxisTicks          | any[]              |               | predefined list of x axis tick values                                                                           |
 | yAxisTicks          | any[]              |               | predefined list of y axis tick values                                                                           |
 | activeEntries       | object[]           | []            | elements to highlight                                                                                           |

@@ -34,6 +34,7 @@
 | maxYAxisTickLength  | number             | 16            | max length of the ticks. If `trimYAxisTicks` is `true`, ticks over this length will be trimmed                    |
 | xAxisTickFormatting | function           |               | the x axis tick formatting                                                                                        |
 | yAxisTickFormatting | function           |               | the y axis tick formatting                                                                                        |
+| yAxisTickMultiLine  | boolean            | false         | display ticks in multiple lines. The max characters by line will be the `maxYAxisTickLength` value                |
 | xAxisTicks          | any\[\]            |               | predefined list of x axis tick values                                                                             |
 | yAxisTicks          | any\[\]            |               | predefined list of y axis tick values                                                                             |
 | activeEntries       | object\[\]         | \[\]          | elements to highlight                                                                                             |

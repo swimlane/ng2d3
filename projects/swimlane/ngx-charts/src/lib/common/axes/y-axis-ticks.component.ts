@@ -12,7 +12,7 @@ import {
   PLATFORM_ID,
   Inject
 } from '@angular/core';
-import { trimLabel } from '../trim-label.helper';
+import { chunkLabel, trimLabel } from '../trim-label.helper';
 import { reduceTicks } from './ticks.helper';
 import { roundedRect } from '../../common/shape.helper';
 import { isPlatformBrowser } from '@angular/common';
@@ -33,7 +33,14 @@ import { TextAnchor } from '../types/text-anchor.enum';
           [attr.text-anchor]="textAnchor"
           [style.font-size]="'12px'"
         >
-          {{ tickTrim(tickFormat(tick)) }}
+          <ng-container *ngIf="!tickMultiLine; else tickMultiLineTemplate">
+            {{ tickTrim(tickFormat(tick)) }}
+          </ng-container>
+          <ng-template #tickMultiLineTemplate>
+            <ng-container *ngFor="let chunk of tickChunk(tickFormat(tick)); let i = index">
+              <svg:tspan x="0" [attr.dy]="i === 0 ? '0' : '1em'">{{ chunk }}</svg:tspan>
+            </ng-container>
+          </ng-template>
         </svg:text>
       </svg:g>
     </svg:g>
@@ -101,6 +108,7 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
   @Input() referenceLines;
   @Input() showRefLabels: boolean = false;
   @Input() showRefLines: boolean = false;
+  @Input() tickMultiLine: boolean = false;
 
   @Output() dimensionsChanged = new EventEmitter();
 
@@ -289,5 +297,9 @@ export class YAxisTicksComponent implements OnChanges, AfterViewInit {
     const maxChars = Math.max(...this.ticks.map(t => this.tickTrim(this.tickFormat(t)).length));
     const charWidth = 7;
     return maxChars * charWidth;
+  }
+
+  tickChunk(label: string): string[] {
+    return chunkLabel(label, this.maxTickLength);
   }
 }

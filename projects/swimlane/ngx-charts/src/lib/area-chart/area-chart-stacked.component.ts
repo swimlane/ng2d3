@@ -55,6 +55,7 @@ import { SeriesType } from '../common/circle-series.component';
           [rotateTicks]="rotateXAxisTicks"
           [maxTickLength]="maxXAxisTickLength"
           [tickFormatting]="xAxisTickFormatting"
+          [tickMultiLine]="xAxisTickMultiLine"
           [ticks]="xAxisTicks"
           (dimensionsChanged)="updateXAxisHeight($event)"
         ></svg:g>
@@ -181,6 +182,7 @@ export class AreaChartStackedComponent extends BaseChartComponent {
   @Input() maxYAxisTickLength: number = 16;
   @Input() xAxisTickFormatting: any;
   @Input() yAxisTickFormatting: any;
+  @Input() xAxisTickMultiLine: boolean = false;
   @Input() xAxisTicks: any[];
   @Input() yAxisTicks: any[];
   @Input() roundDomains: boolean = false;
