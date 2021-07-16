@@ -7,7 +7,8 @@ import {
   SimpleChanges,
   OnChanges,
   ChangeDetectorRef,
-  ViewEncapsulation
+  ViewEncapsulation,
+  TemplateRef
 } from '@angular/core';
 import { formatLabel } from '../label.helper';
 import { ColorHelper } from '../color.helper';
@@ -31,6 +32,7 @@ export interface LegendEntry {
             <ngx-charts-legend-entry
               [label]="entry.label"
               [formattedLabel]="entry.formattedLabel"
+              [legendEntryTemplate]="legendEntryTemplate"
               [color]="entry.color"
               [isActive]="isActive(entry)"
               (select)="labelClick.emit($event)"
@@ -55,6 +57,7 @@ export class LegendComponent implements OnChanges {
   @Input() width: number;
   @Input() activeEntries;
   @Input() horizontal = false;
+  @Input() legendEntryTemplate: TemplateRef<any>;
 
   @Output() labelClick: EventEmitter<string> = new EventEmitter();
   @Output() labelActivate: EventEmitter<{ name: string }> = new EventEmitter();
