@@ -158,9 +158,9 @@ export class SeriesVerticalComponent implements OnChanges {
         const offset1 = offset0 + value;
         d0[d0Type] += value;
 
-        bar.height = this.yScale(offset0) - this.yScale(offset1);
+        bar.height = Math.ceil(this.yScale(offset0) - this.yScale(offset1));
         bar.x = 0;
-        bar.y = this.yScale(offset1);
+        bar.y = Math.ceil(this.yScale(offset1));
         bar.offset0 = offset0;
         bar.offset1 = offset1;
       } else if (this.type === BarChartType.Normalized) {
